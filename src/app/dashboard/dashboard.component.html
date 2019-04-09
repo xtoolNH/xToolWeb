@@ -1,0 +1,161 @@
+
+<div class="container-fluid top-header">
+  <div class="row">
+    <div class="col-6">
+      <img src="..//..//assets/images/logo.PNG" class="logo" alt="">
+    </div>
+    <div class="col-6">
+      <div class="custom-file">
+        <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
+          directory multiple class="custom-file-input" id="customFile">
+        <label class="custom-file-label" for="customFile">Choose file</label>
+      </div>
+      <button class="btn btn-primary" id="playPause" (click)="playCharts()"
+        style="float: right; margin-top: 10px;">Start</button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div id="main-div">
+    <div *ngIf="!hide" [@fadeInOut] class="card">
+      <div class="card-body">
+        <!-- <div id="eeg-chart-div"> -->
+        <div id="chart-Container" class="face-expression"></div>
+        <!-- </div> -->
+      </div>
+    </div>
+    <!-- id="wrapper-div"  -->
+    <div class="row">
+      <div class="col-md-8" id="video-div">
+        <video #video controls (click)="playVideo($event)"></video>
+      </div>
+      <div class="col-md-3" style="margin-top:10px;">
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Happy.png" alt="Happy" width="28" height="28"
+              title="Happy" />
+            <div class="progress img-progress">
+              <div class="progress-bar happy" [style.width]="Happy + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Happy}}%</span>
+        </div>
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Surprised.png" alt="Surprised" width="28"
+              height="28" title="Surprised" />
+            <div class="progress img-progress">
+              <div class="progress-bar suprise" [style.width]="Surprised + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Surprised}}%</span>
+        </div>
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Neutral.png" alt="Neutral" width="28"
+              height="28" title="Neutral" />
+            <div class="progress img-progress">
+              <div class="progress-bar neutral" [style.width]="Neutral + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Neutral}}%</span>
+        </div>
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Fearful.png" alt="Fearful" width="28"
+              height="28" title="Fearful" />
+            <div class="progress img-progress">
+              <div class="progress-bar fear" [style.width]="Fearful + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Fearful}}%</span>
+        </div>
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Sad.png" alt="Sad" width="28" height="28"
+              title="Sad" />
+            <div class="progress img-progress">
+              <div class="progress-bar sad" [style.width]="Sad + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Sad}}%</span>
+        </div>
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Disgusted.png" alt="Disgusted" width="28"
+              height="28" title="Disgusted" />
+            <div class="progress img-progress">
+              <div class="progress-bar disgusted" [style.width]="Disgusted + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Disgusted}}%</span>
+        </div>
+        <div class="per-flex">
+          <li class="li-img li-image-custom"><img src="../../assets/images/Angry.png" alt="Angry" width="28" height="28"
+              title="Angry" />
+            <div class="progress img-progress">
+              <div class="progress-bar angry" [style.width]="Angry + '%'">
+              </div>
+            </div>
+          </li>
+          <span class="text-white">{{Angry}}%</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="notesData?.length > 0" [@fadeInOut] class="row">
+      <div class="timeline">
+        <div class="events">
+          <ol>
+            <ul>
+              <li *ngFor="let note of notesData" placement="bottom" ngbTooltip="{{note.note}}">
+                <a class="selected">{{note.time | slice: 11:20}}</a>
+              </li>
+            </ul>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!hide" [@fadeInOut] class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <!-- <div id="face-expressions-div"> -->
+            <div id="face-expressions-chart-Container" class="face-expression">
+            </div>
+            <!-- </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!hide" [@fadeInOut] class="card">
+      <div class="card-body">
+        <!-- <div id="eeg-chart-full-div"> -->
+        <div id="eeg-chart-full-Container"></div>
+        <!-- </div> -->
+      </div>
+    </div>
+    <div *ngIf="!hide" [@fadeInOut] class="card">
+      <div class="card-body">
+        <!-- <div id="face-expressions-full-div"> -->
+        <div id="face-expressions-chart-full-Container">
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!hide" [@fadeInOut] class="card">
+      <div class="card-body">
+        <!-- <div class="timeline">
+          <div class="events">
+            <ol>
+              <ul>
+                <li *ngFor="let note of notesData" placement="bottom" ngbTooltip="{{note.note}}">
+                  <a class="selected">{{note.time | slice: 11:20}}</a>
+                </li>
+              </ul>
+            </ol>
+          </div>
+        </div> -->
+      </div>
+    </div>
+</div>
+</div>

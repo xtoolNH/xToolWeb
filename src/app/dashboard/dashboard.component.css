@@ -1,0 +1,299 @@
+#myvideofile {
+  display: block;
+  height: 20%;
+  width: 40%;
+}
+
+video {
+  display: block;
+  height: 275px;
+  width: 80%;
+  -o-object-fit: fill;
+  object-fit: fill;
+  margin: auto;
+  max-width: 600px;
+}
+
+#wrapper-div {
+  width: 60%;
+  border: 1px solid black;
+  overflow: hidden;
+  margin: 0px auto;
+}
+
+#video-div {
+  width: 85%;
+  float:left; /* add this */
+  /* border: 1px solid red; */
+  margin: 10px 5px 0px 0px;
+}
+
+#emojis-div {
+  /* border: 1px solid green; */
+  overflow: hidden;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+}
+
+#face-expressions-div, #eeg-chart-div {
+  width: 60%;
+  /* border: 1px solid black; */
+  margin: 0px auto;
+}
+
+#eeg-chart-full-div, #face-expressions-full-div {
+/* width: 95%; */
+height: 600px;
+border:  1px solid black;
+margin: 0 auto;
+margin-top: 20px;
+margin-bottom: 20px;
+width: 60%;
+}
+
+#eeg-chart-full-Container, #face-expressions-chart-full-Container {
+  display: block;
+  margin: 20px;
+  width: 90%;
+  height: 500px;
+}
+
+/* #eeg-chart-div {
+  width: 60%;
+  border: 1px solid black;
+  margin: 0px auto;
+} */
+
+.li-img {
+  list-style-type: none;
+  margin: 1px;
+  height: 36px;
+}
+
+.li-span {
+  display: inline-block;
+  /* text-align: right; */
+  height: 50px;
+  /* padding: 5px; */
+  margin: 5px;
+}
+
+#main-div {
+height: 600px;
+}
+
+#LoadAllFiles {
+  margin-left: 115px;
+}
+
+body {
+  background-color:black;
+}
+
+.img-progress {
+  /* flex: 1; */
+  width: 50%;
+  margin-top: 5px;
+  margin-left: 2px;
+  position: absolute;
+  margin-left: 53px;
+}
+
+
+.li-image-custom {
+  display: flex;
+  width: 250px; 
+}
+
+.progress-bar {
+  /* background-color:  #f8bd00; */
+  position: relative;
+}
+
+.imoji-per {
+  margin-left: 2px;
+}
+
+.custom-file {
+  margin-top: 10px;
+  width: 90%;
+}
+
+.face-expression {
+  height: 118px;  
+  display: block; 
+}
+
+.card {
+  margin-top: 10px
+}
+
+.per-flex {
+  display: flex;
+}
+
+.angry{
+  background-color: #e41306;
+}
+
+.disgusted{
+  background-color: #7e2653;
+}
+
+.suprise{
+  background-color: #fbc54a;
+}
+
+.happy{
+  background-color: #8df068;
+}
+
+.neutral{
+  background-color: #b7b7b3;
+}
+
+.fear{
+  background-color: #fbc54a;
+}
+
+.sad {
+  background-color: #5099d4;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 0.3rem 1.25rem;
+}
+.top-header{
+  background: #fff;
+}
+.logo{
+  height: 50px;
+  margin-bottom: 4px;
+  margin-top: 4px;
+}
+
+/* Timeline */
+
+/* body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: #232323;
+} */
+
+/* *,
+*:after,
+*:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+            
+.timeline {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: #232323;
+  width: 100%;
+  max-width: 1095px;
+  margin: 0 auto;
+  margin-top: -45px;
+  margin-bottom: -70px;
+  display: flex;
+  justify-content: center;
+
+}
+
+.timeline .events {
+  position: relative;
+  background-color: #ffffff;
+  height: 3px;
+  width: 100%;
+  border-radius: 4px;
+  margin: 4.5em 0;
+ }
+
+.timeline .events ol {
+  margin: 0;
+  padding: 0;
+  /* text-align: center; */
+}
+
+.timeline .events ul {
+  list-style: none;
+}
+
+.timeline .events ul li {
+  display: inline-block;
+  width: 8%;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline .events ul li a {
+  font-family: 'Arapey', sans-serif;
+  font-style: italic;
+  /* font-size: 1.25em; */
+  color: #ffffff;
+  text-decoration: none;
+  position: relative;
+  top: -26px;
+}
+
+.timeline .events ul li a:after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  right: auto;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  border: 3px solid #606060;
+  background-color: #fff;
+  transition: 0.3s ease;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.timeline .events ul li a:hover::after {
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.timeline .events ul li a.selected:after {
+  background-color: #fff;
+  border-color: #fff;
+}
+            
+.events-content {
+  width: 100%;
+  height: 100px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;      
+  justify-content: left;
+}
+
+.events-content li {
+  display: none;
+  list-style: none;
+}
+
+.events-content li.selected {
+  display: initial;
+}
+
+.events-content li h2 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 500;
+  color: #919191;
+  font-size: 2.5em;
+}
+
+::ng-deep .tooltip-inner {
+  width: 400px;
+  background-color: #ffffff;
+  color: black;
+  border: solid 1px black;
+}
