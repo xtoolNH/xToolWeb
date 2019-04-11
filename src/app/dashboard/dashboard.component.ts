@@ -505,7 +505,6 @@ export class DashboardComponent implements OnInit {
     let counter = 0;
     let date_time_counter = 0;
     const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
-    console.log('facial', axisXViewportMaximum);
     const chart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
       title: {
         text: 'Facial Expression Data'
@@ -723,7 +722,6 @@ export class DashboardComponent implements OnInit {
       if (myGlobals.attention_data.length === 0) {
         return;
       }
-      // this.notesData = myGlobals.notesData.filter(item => item.note);
       this.notesData = myGlobals.notesData;
       this.drawCharts();
       this.faceExpressionsDrawChart();
@@ -749,7 +747,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getfolder(e) {
-    // this.initiateGraphs();
     this.hide = true;
     const files = e.target.files;
     const path = files[0].webkitRelativePath;

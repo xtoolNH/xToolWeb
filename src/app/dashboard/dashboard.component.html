@@ -107,7 +107,7 @@
         <div class="events">
           <ol>
             <ul>
-              <li *ngFor="let note of notesData" placement="bottom" container="body" ngbTooltip="{{note.note}}">
+              <li *ngFor="let note of notesData" placement="bottom" container="body" ngbTooltip="{{note.time | slice:11:20 }} {{note.note}}">
                 <a *ngIf="note.note" class="selected"></a>
               </li>
             </ul>
