@@ -723,7 +723,8 @@ export class DashboardComponent implements OnInit {
       if (myGlobals.attention_data.length === 0) {
         return;
       }
-      this.notesData = myGlobals.notesData.filter(item => item.note);
+      // this.notesData = myGlobals.notesData.filter(item => item.note);
+      this.notesData = myGlobals.notesData;
       this.drawCharts();
       this.faceExpressionsDrawChart();
       this.drawFullScreenEEGChart();

@@ -103,7 +103,7 @@ body {
 
 .li-image-custom {
   display: flex;
-  width: 250px; 
+  width: 250px;
 }
 
 .progress-bar {
@@ -121,8 +121,8 @@ body {
 }
 
 .face-expression {
-  height: 118px;  
-  display: block; 
+  height: 118px;
+  display: block;
 }
 
 .card {
@@ -189,7 +189,7 @@ body {
   padding: 0;
   box-sizing: border-box;
 } */
-            
+
 .timeline {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
@@ -220,14 +220,18 @@ body {
 }
 
 .timeline .events ul {
-  list-style: none;
+  /* list-style: none; */
+  display: inline-table;
+  width: 100%;
+
 }
 
 .timeline .events ul li {
-  display: inline-block;
-  width: 8%;
+  /* display: inline-block;
+  width: 1%;
   margin: 0;
-  padding: 0;
+  padding: 0; */
+  display: table-cell
 }
 
 .timeline .events ul li a {
@@ -236,14 +240,14 @@ body {
   /* font-size: 1.25em; */
   color: #ffffff;
   text-decoration: none;
-  position: relative;
+  position: absolute;
   top: -26px;
 }
 
 .timeline .events ul li a:after {
   content: '';
   position: absolute;
-  bottom: -12px;
+  bottom: -32px;
   left: 50%;
   right: auto;
   height: 10px;
@@ -265,13 +269,13 @@ body {
   background-color: #fff;
   border-color: #fff;
 }
-            
+
 .events-content {
   width: 100%;
   height: 100px;
   max-width: 800px;
   margin: 0 auto;
-  display: flex;      
+  display: flex;
   justify-content: left;
 }
 
