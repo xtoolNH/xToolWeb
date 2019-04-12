@@ -506,6 +506,7 @@ export class DashboardComponent implements OnInit {
     let date_time_counter = 0;
     const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
     const chart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
+      theme: "light1",
       title: {
         text: 'Facial Expression Data'
       },

@@ -13,7 +13,6 @@
         <button class="btn btn-outline-primary my-2 my-sm-0"  type="submit" (click)="playCharts()">Start</button>
     </div>
   </nav>
-
 <!-- <div class="container-fluid top-header">
   <div class="row">
     <div class="col-2 col-sm-4 col-md-6">
@@ -33,13 +32,10 @@
 <div class="container">
   <div id="main-div">
     <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div id="eeg-chart-div"> -->
+      <!-- <div class="card-body"> -->
         <div id="chart-Container" class="face-expression"></div>
-        <!-- </div> -->
-      </div>
+      <!-- </div> -->
     </div>
-    <!-- id="wrapper-div"  -->
     <div class="row">
       <div class="col-md-8" id="video-div">
         <video #video controls (click)="playVideo($event)"></video>
@@ -132,44 +128,23 @@
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-body">
-            <!-- <div id="face-expressions-div"> -->
+        <!-- <div class="card"> -->
+          <!-- <div class="card-body"> -->
             <div id="face-expressions-chart-Container" class="face-expression">
-            </div>
             <!-- </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div id="eeg-chart-full-div"> -->
-        <div id="eeg-chart-full-Container"></div>
-        <!-- </div> -->
-      </div>
-    </div>
-    <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div id="face-expressions-full-div"> -->
-        <div id="face-expressions-chart-full-Container">
           <!-- </div> -->
         </div>
       </div>
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div class="timeline">
-          <div class="events">
-            <ol>
-              <ul>
-                <li *ngFor="let note of notesData" placement="bottom" ngbTooltip="{{note.note}}">
-                  <a class="selected">{{note.time | slice: 11:20}}</a>
-                </li>
-              </ul>
-            </ol>
-          </div>
-        </div> -->
+      <!-- <div class="card-body"> -->
+        <div id="eeg-chart-full-Container"></div>
+      <!-- </div> -->
+    </div>
+    <div *ngIf="!hide" [@fadeInOut] class="card">
+      <!-- <div class="card-body"> -->
+        <div id="face-expressions-chart-full-Container">
+        <!-- </div> -->
       </div>
     </div>
 </div>
