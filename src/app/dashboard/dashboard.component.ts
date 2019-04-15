@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   Sad: String = '0.0';
   Surprised: String = '0.0';
   graphStartTime: number;
-  notesData: { time: string, note: string }[];
+  notesData: { time: string, task: string, note: string }[];
   hide: boolean;
   @ViewChild('video') video: ElementRef;
 
@@ -389,20 +389,22 @@ export class DashboardComponent implements OnInit {
     const firstRecord = local_data[0].split(',');
     local_data.forEach(element => {
       const tData = element.split(',');
-      const flag = Number(tData[13].toString().slice(0, 1));
-      if (flag) {
-        myGlobals.date_time_data.push(counter);
-        myGlobals.attention_data.push(tData[9]);
-        myGlobals.relaxed_data.push(tData[10]);
-        myGlobals.stress_data.push(tData[11]);
-        counter++;
-        if (counter === 1) {
-          const calibrationEndString = tData[0].slice(11, 20).split(':');
-          const calibrationEnd = (+calibrationEndString[0]) * 60 * 60 + (+calibrationEndString[1]) * 60 + (+calibrationEndString[2]);
-          const calibrationStartString = firstRecord[0].slice(11, 20).split(':');
-          const calibrationStart =
-            (+calibrationStartString[0]) * 60 * 60 + (+calibrationStartString[1]) * 60 + (+calibrationStartString[2]);
-          myGlobals.graphStartTime.push(Number((calibrationEnd - calibrationStart) * 1000));
+      if (tData) {
+        const flag = Number(tData[13].toString().slice(0, 1));
+        if (flag) {
+          myGlobals.date_time_data.push(counter);
+          myGlobals.attention_data.push(tData[9]);
+          myGlobals.relaxed_data.push(tData[10]);
+          myGlobals.stress_data.push(tData[11]);
+          counter++;
+          if (counter === 1) {
+            const calibrationEndString = tData[0].slice(11, 20).split(':');
+            const calibrationEnd = (+calibrationEndString[0]) * 60 * 60 + (+calibrationEndString[1]) * 60 + (+calibrationEndString[2]);
+            const calibrationStartString = firstRecord[0].slice(11, 20).split(':');
+            const calibrationStart =
+              (+calibrationStartString[0]) * 60 * 60 + (+calibrationStartString[1]) * 60 + (+calibrationStartString[2]);
+            myGlobals.graphStartTime.push(Number((calibrationEnd - calibrationStart) * 1000));
+          }
         }
       }
     });
@@ -781,7 +783,7 @@ export class DashboardComponent implements OnInit {
     for (let i = 0; i < local_data.length; i++) {
       if (i > 0) {
         const tData = local_data[i].split(',');
-        myGlobals.notesData.push({ time: tData[0], note: tData[1] ? tData[1].slice(0, -2) : '' });
+        myGlobals.notesData.push({ time: tData[0], task: tData[1], note: tData[2] ? tData[2].slice(0, -2) : '' });
       }
     }
   }

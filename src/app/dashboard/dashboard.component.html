@@ -4,7 +4,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent"> 
+    <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent">
         <div class="custom-file col-sm-5 mr-2">
             <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
               directory multiple class="custom-file-input" id="customFile">
@@ -118,8 +118,9 @@
         <div class="events">
           <ol>
             <ul>
-              <li *ngFor="let note of notesData" placement="bottom" container="body" ngbTooltip="{{note.time | slice:11:20 }} {{note.note}}">
-                <a *ngIf="note.note" class="selected"></a>
+              <li *ngFor="let note of notesData" placement="bottom" container="body" ngbTooltip="{{note.time}}-{{note.task}} {{note.note}}">
+                <a *ngIf="(note.task && note.note) || note.task" class="selected-task"></a>
+                <a *ngIf="!note.task && note.note" class="selected"></a>
               </li>
             </ul>
           </ol>

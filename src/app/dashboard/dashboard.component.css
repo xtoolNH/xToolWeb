@@ -264,6 +264,10 @@ body {
   background-color: #fff;
   border-color: #fff;
 }
+.timeline .events ul li a.selected-task:after {
+  background-color: #fd7e14;
+  border-color: #fd7e14;
+}
 
 .events-content {
   width: 100%;
