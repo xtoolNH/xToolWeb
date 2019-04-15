@@ -243,7 +243,7 @@ export class DashboardComponent implements OnInit {
           name: 'Attention',
           color: '#4F81BC',
           showInLegend: true,
-          markerType: 'line',
+          markerSize: 0,
           dataPoints: attentiondps
         },
         {
@@ -608,9 +608,8 @@ export class DashboardComponent implements OnInit {
           // axisYType: 'secondary',
           name: 'Angry',
           showInLegend: true,
-          // markerSize: 0,
+          markerSize: 0,
           color: '#e41306',
-          markerType: 'line',
           dataPoints: angryExpdps
         }
       ]
