@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   Sad: String = '0.0';
   Surprised: String = '0.0';
   graphStartTime: number;
-  notesData: { time: string, task: string, note: string }[];
+  notesData: { time: string, task: string, note: string, rColor: string }[];
   hide: boolean;
   @ViewChild('video') video: ElementRef;
 
@@ -779,10 +779,24 @@ export class DashboardComponent implements OnInit {
     myGlobals.notesData.splice(0, myGlobals.notesData.length);
     const textFromFileLoaded = JSON.stringify(fileLoadedEvent.target.result);
     const local_data = (textFromFileLoaded).split('\\n');
+    let preColor = null;
     for (let i = 0; i < local_data.length; i++) {
       if (i > 0) {
         const tData = local_data[i].split(',');
-        myGlobals.notesData.push({ time: tData[0], task: tData[1], note: tData[2] ? tData[2].slice(0, -2) : '' });
+        let rcolor = null;
+        if (tData[1]) {
+
+          if (tData[1].includes('start')) {
+            // Get rendom color
+            rcolor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            preColor = rcolor;
+          }
+          else if (tData[1].includes('end')) {
+            rcolor = preColor;
+          }
+        }
+
+        myGlobals.notesData.push({ time: tData[0], task: tData[1], note: tData[2] ? tData[2].slice(0, -2) : '', rColor: rcolor });
       }
     }
   }

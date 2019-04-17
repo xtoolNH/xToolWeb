@@ -17,7 +17,7 @@ export const happyExpData = [];
 export const sadExpData = [];
 export const surprisedExpData = [];
 export const neutralExpData = [];
-export const notesData: {time: string, task: string, note: string } [] = [];
+export const notesData: {time: string, task: string, note: string, rColor: string } [] = [];
 
 export const graphStartTime = [];
 export const graphStartTimeFacial = [];

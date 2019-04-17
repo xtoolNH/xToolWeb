@@ -119,7 +119,7 @@
           <ol>
             <ul>
               <li *ngFor="let note of notesData" placement="bottom" container="body" ngbTooltip="{{note.time}}-{{note.task}} {{note.note}}">
-                <a *ngIf="(note.task && note.note) || note.task" class="selected-task"></a>
+                <a *ngIf="(note.task && note.note) || note.task" [ngStyle]="{'background-color': note.rColor,'border-color': note.rColor}" ></a>
                 <a *ngIf="!note.task && note.note" class="selected"></a>
               </li>
             </ul>
