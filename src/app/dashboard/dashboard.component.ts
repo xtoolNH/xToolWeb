@@ -495,18 +495,18 @@ export class DashboardComponent implements OnInit {
 
   // Common method to set the face expression chart data
   setFaceExpressionChartData(faceExpDrawChartContainerId: string) {
-    let angryExpdps = []; // dataPoints
-    let disgustedExpdps = [];
-    let fearfulExpdps = [];
-    let happyExpdps = [];
-    let sadExpdps = [];
-    let surprisedExpdps = [];
-    let neutralExpdps = [];
+    const angryExpdps = []; // dataPoints
+    const disgustedExpdps = [];
+    const fearfulExpdps = [];
+    const happyExpdps = [];
+    const sadExpdps = [];
+    const surprisedExpdps = [];
+    const neutralExpdps = [];
     let counter = 0;
     let date_time_counter = 0;
     const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
     const chart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
-      theme: "light1",
+      theme: 'light1',
       title: {
         text: 'Facial Expression Data'
       },
