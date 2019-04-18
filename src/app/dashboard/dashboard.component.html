@@ -1,10 +1,24 @@
 
-<div class="container-fluid top-header">
-  <div class="row">
-    <div class="col-6">
-      <img src="..//..//assets/images/logo.PNG" class="logo" alt="">
+<nav class="navbar navbar-expand-lg pt-0 pb-0 navbar-light bg-white">
+    <a class="navbar-brand" href="#"> <img src="../../assets/images/logo.PNG" class="logo" alt=""></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent">
+        <div class="custom-file col-sm-5 mr-2">
+            <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
+              directory multiple class="custom-file-input" id="customFile">
+            <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <button class="btn btn-outline-primary my-2 my-sm-0"  type="submit" (click)="playCharts()">Start</button>
     </div>
-    <div class="col-6">
+  </nav>
+<!-- <div class="container-fluid top-header">
+  <div class="row">
+    <div class="col-2 col-sm-4 col-md-6">
+      <img src="../../assets/images/logo.PNG" class="logo" alt="">
+    </div>
+    <div class="col-10 col-sm-8 col-md-6">
       <div class="custom-file">
         <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
           directory multiple class="custom-file-input" id="customFile">
@@ -14,17 +28,14 @@
         style="float: right; margin-top: 10px;">Start</button>
     </div>
   </div>
-</div>
+</div> -->
 <div class="container">
   <div id="main-div">
     <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div id="eeg-chart-div"> -->
+      <!-- <div class="card-body"> -->
         <div id="chart-Container" class="face-expression"></div>
-        <!-- </div> -->
-      </div>
+      <!-- </div> -->
     </div>
-    <!-- id="wrapper-div"  -->
     <div class="row">
       <div class="col-md-8" id="video-div">
         <video #video controls (click)="playVideo($event)"></video>
@@ -107,8 +118,9 @@
         <div class="events">
           <ol>
             <ul>
-              <li *ngFor="let note of notesData" placement="bottom" ngbTooltip="{{note.note}}">
-                <a class="selected">{{note.time | slice: 11:20}}</a>
+              <li *ngFor="let note of notesData" placement="bottom" container="body" ngbTooltip="{{note.time}}-{{note.task}} {{note.note}}">
+                <a *ngIf="(note.task && note.note) || note.task" [ngStyle]="{'background-color': note.rColor,'border-color': note.rColor}" ></a>
+                <a *ngIf="!note.task && note.note" class="selected"></a>
               </li>
             </ul>
           </ol>
@@ -117,44 +129,23 @@
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-body">
-            <!-- <div id="face-expressions-div"> -->
+        <!-- <div class="card"> -->
+          <!-- <div class="card-body"> -->
             <div id="face-expressions-chart-Container" class="face-expression">
-            </div>
             <!-- </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div id="eeg-chart-full-div"> -->
-        <div id="eeg-chart-full-Container"></div>
-        <!-- </div> -->
-      </div>
-    </div>
-    <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div id="face-expressions-full-div"> -->
-        <div id="face-expressions-chart-full-Container">
           <!-- </div> -->
         </div>
       </div>
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="card">
-      <div class="card-body">
-        <!-- <div class="timeline">
-          <div class="events">
-            <ol>
-              <ul>
-                <li *ngFor="let note of notesData" placement="bottom" ngbTooltip="{{note.note}}">
-                  <a class="selected">{{note.time | slice: 11:20}}</a>
-                </li>
-              </ul>
-            </ol>
-          </div>
-        </div> -->
+      <!-- <div class="card-body"> -->
+        <div id="eeg-chart-full-Container"></div>
+      <!-- </div> -->
+    </div>
+    <div *ngIf="!hide" [@fadeInOut] class="card">
+      <!-- <div class="card-body"> -->
+        <div id="face-expressions-chart-full-Container">
+        <!-- </div> -->
       </div>
     </div>
 </div>

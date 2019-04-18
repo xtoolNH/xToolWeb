@@ -103,7 +103,7 @@ body {
 
 .li-image-custom {
   display: flex;
-  width: 250px; 
+  width: 250px;
 }
 
 .progress-bar {
@@ -115,14 +115,14 @@ body {
   margin-left: 2px;
 }
 
-.custom-file {
+/* .custom-file {
   margin-top: 10px;
   width: 90%;
-}
+} */
 
 .face-expression {
-  height: 118px;  
-  display: block; 
+  height: 118px;
+  display: block;
 }
 
 .card {
@@ -169,7 +169,7 @@ body {
   background: #fff;
 }
 .logo{
-  height: 50px;
+  height: 40px;
   margin-bottom: 4px;
   margin-top: 4px;
 }
@@ -189,7 +189,7 @@ body {
   padding: 0;
   box-sizing: border-box;
 } */
-            
+
 .timeline {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
@@ -197,8 +197,8 @@ body {
   width: 100%;
   max-width: 1095px;
   margin: 0 auto;
-  margin-top: -45px;
-  margin-bottom: -70px;
+  margin-top: -55px;
+  margin-bottom: -60px;
   display: flex;
   justify-content: center;
 
@@ -220,31 +220,30 @@ body {
 }
 
 .timeline .events ul {
-  list-style: none;
+  /* list-style: none; */
+  display: inline-table;
+  width: 100%;
+
 }
 
 .timeline .events ul li {
-  display: inline-block;
-  width: 8%;
-  margin: 0;
-  padding: 0;
+  display: table-cell
 }
 
 .timeline .events ul li a {
   font-family: 'Arapey', sans-serif;
   font-style: italic;
-  /* font-size: 1.25em; */
   color: #ffffff;
   text-decoration: none;
-  position: relative;
+  position: absolute;
   top: -26px;
 }
 
-.timeline .events ul li a:after {
+.timeline .events ul li a {
   content: '';
   position: absolute;
-  bottom: -12px;
-  left: 50%;
+  bottom: -32px;
+  /* left: 50%; */
   right: auto;
   height: 10px;
   width: 10px;
@@ -254,6 +253,7 @@ body {
   transition: 0.3s ease;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
+  margin-top: 22px;
 }
 
 .timeline .events ul li a:hover::after {
@@ -261,17 +261,21 @@ body {
   border-color: #fff;
 }
 
-.timeline .events ul li a.selected:after {
+.timeline .events ul li a.selected {
   background-color: #fff;
   border-color: #fff;
 }
-            
+.timeline .events ul li a.selectedtask {
+  background-color: #fd7e14;
+  border-color: #fd7e14;
+}
+
 .events-content {
   width: 100%;
   height: 100px;
   max-width: 800px;
   margin: 0 auto;
-  display: flex;      
+  display: flex;
   justify-content: left;
 }
 
@@ -297,3 +301,5 @@ body {
   color: black;
   border: solid 1px black;
 }
+
+/* 212124 */
