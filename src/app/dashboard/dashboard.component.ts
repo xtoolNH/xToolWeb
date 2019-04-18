@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
   }
 
   drawRelaxedChart() {
-    const dps = []; // dataPoints
+    const dps = []; // dataPoint
     let relaxed_counter = 0;
     let date_time_counter = 0;
     const chart = new CanvasJS.Chart('relaxed-chart-Container', {
@@ -110,7 +110,6 @@ export class DashboardComponent implements OnInit {
       data: [{
         type: 'spline',
         markerType: 'none',
-        // fillOpacity: .3,
         dataPoints: dps
       }]
     });
@@ -785,7 +784,6 @@ export class DashboardComponent implements OnInit {
         const tData = local_data[i].split(',');
         let rcolor = null;
         if (tData[1]) {
-
           if (tData[1].includes('start')) {
             // Get rendom color
             rcolor = '#' + Math.floor(Math.random() * 16777215).toString(16);
