@@ -12,6 +12,7 @@ export class RegisterUserComponent implements OnInit {
 
   signUpForm: FormGroup;
   error: string;
+  successMessage: string;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService) { }
@@ -29,15 +30,16 @@ export class RegisterUserComponent implements OnInit {
     });
   }
 
-  singUp() {
+  signUp() {
     if (!this.signUpForm.valid) {
       this.error = 'Please fill all required field';
       return;
+    } else if (this.signUpForm.get('password').value !== this.signUpForm.get('confirmPassword').value) {
+      this.error = 'Password must be same';
+      return;
     }
-    this.authService.registerUser(this.signUpForm.value).subscribe((res: any) => {
-      if (res.status === 200) {
-        console.log(res);
-      }
+    this.authService.registerUser(this.signUpForm.value).subscribe((res: {message: string}) => {
+    this.successMessage = res.message;
     }, (err: HttpErrorResponse) => {
        this.error = err.error;
     });

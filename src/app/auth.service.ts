@@ -11,11 +11,12 @@ export class AuthService {
 
   login(loginForm) {
     const authUrl = 'http://localhost:3000/api/users/authenticate';
-    return this.http.post(authUrl, loginForm);
+    return this.http.post(authUrl, loginForm, {observe: 'response' as 'body'});
   }
+
   logout() {}
 
   registerUser(signUpForm) {
-    return this.http.post('http://localhost:3000/api/users/registerUser', signUpForm);
+    return this.http.post('http://localhost:3000/api/users/register', signUpForm);
   }
 }

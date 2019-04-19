@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -38,11 +39,12 @@ export class LoginComponent implements OnInit {
       .login(this.loginForm.value)
       .pipe(first())
       .subscribe(
-        data => {
-          this.route.navigate(['/dashboard']);
+        (res: HttpResponse<any>) => {
+        sessionStorage.setItem('x_tool_user', res.headers.get('x-auth-token'));
+        this.route.navigate(['/dashboard']);
         },
-        error => {
-          this.errorMessage = error;
+        (err: HttpErrorResponse) => {
+          this.errorMessage = err.error;
           this.loginForm.get('password').setValue('');
           this.authService.logout();
         }
