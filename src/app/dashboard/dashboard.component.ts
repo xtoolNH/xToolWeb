@@ -3,6 +3,7 @@ import * as CanvasJS from './canvasjs.min';
 import * as myGlobals from '../model/global';
 import { interval } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { collectExternalReferences } from '@angular/compiler';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,7 +35,9 @@ export class DashboardComponent implements OnInit {
   graphStartTime: number;
   notesData: { time: string, task: string, note: string, rColor: string }[];
   hide: boolean;
+  files = [];
   @ViewChild('video') video: ElementRef;
+  @ViewChild('videoUser') videoUser: ElementRef;
 
   constructor() { }
 
@@ -479,8 +482,6 @@ export class DashboardComponent implements OnInit {
   playSelectedFile(event) {
     const file = event.target.files[0];
     const videoNode = document.querySelector('video');
-    const fileURL = URL.createObjectURL(file);
-    videoNode.src = fileURL;
   }
 
   faceExpressionsDrawChart() {
@@ -714,11 +715,20 @@ export class DashboardComponent implements OnInit {
   }
 
   playCharts() {
+
+    if (this.files.length === 0) {
+      alert('Please upload the test file..!');
+      return;
+    }
+
     this.hide = false;
-    const vid1 = document.getElementsByTagName('video');
-    const temp = vid1[0];
-    temp.load();
-    temp.paused ? temp.play() : temp.pause();
+    const videoList = document.getElementsByTagName('video');
+
+    for (let i = 0; i < videoList.length; i++) {
+      videoList[i].load();
+      videoList[i].paused ? videoList[i].play() : videoList[i].pause();
+    }
+
     const videoStart = (myGlobals.graphStartTime[0] + myGlobals.graphStartTimeFacial[0]) / 2;
     setTimeout(() => {
       if (myGlobals.attention_data.length === 0) {
@@ -750,27 +760,31 @@ export class DashboardComponent implements OnInit {
 
   getfolder(e) {
     this.hide = true;
-    const files = e.target.files;
-    const path = files[0].webkitRelativePath;
-    let file1 = files[0].name;
-    for (let ii = 0; ii < files.length; ii++) {
-      const arrFilename = (files[ii].name).split('_');
+    this.files = e.target.files;
+    const path = this.files[0].webkitRelativePath;
+    let file1 = this.files[0].name;
+    for (let ii = 0; ii < this.files.length; ii++) {
+      const arrFilename = (this.files[ii].name).split('_');
       if (arrFilename[arrFilename.length - 1] === 'EEG.csv') {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoad;
-        fileReader.readAsText(files[ii], 'UTF-8');
+        fileReader.readAsText(this.files[ii], 'UTF-8');
       } else if (arrFilename[arrFilename.length - 1] === 'Facial.csv') {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoadForFaceExpressions;
-        fileReader.readAsText(files[ii], 'UTF-8');
+        fileReader.readAsText(this.files[ii], 'UTF-8');
       } else if (arrFilename[arrFilename.length - 1] === 'Notes.csv') {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoadNotes;
-        fileReader.readAsText(files[ii], 'UTF-8');
+        fileReader.readAsText(this.files[ii], 'UTF-8');
       } else if (arrFilename[arrFilename.length - 1] === 'Video.mp4') {  // arrFilename[arrFilename.length - 1] === 'Video.avi'
-        const videoNode = document.querySelector('video');
-        const fileURL = URL.createObjectURL(files[ii]);
-        videoNode.src = fileURL;
+
+      const fileURL = URL.createObjectURL(this.files[ii]);
+      const videoNode = this.video.nativeElement;
+      videoNode.src = URL.createObjectURL(this.files[ii]);
+      // ToDo: Url will be change - Re-visit
+      const videoUser = this.videoUser.nativeElement;
+      videoUser.src = URL.createObjectURL(this.files[ii]);
       }
     }
   }
@@ -780,21 +794,21 @@ export class DashboardComponent implements OnInit {
     const textFromFileLoaded = JSON.stringify(fileLoadedEvent.target.result);
     const local_data = (textFromFileLoaded).split('\\n');
     let preColor = null;
-    for (let i = 0; i < local_data.length; i++) {
+    for (let i = 0; i < myGlobals.date_time_data.length; i++) {
       if (i > 0) {
         const tData = local_data[i].split(',');
         let rcolor = null;
         if (tData[1]) {
 
-          if (tData[1].includes('start')) {
+          if (tData[1].toString().toLowerCase().includes('start')) {
             // Get rendom color
             rcolor = '#' + Math.floor(Math.random() * 16777215).toString(16);
             preColor = rcolor;
           }
-          else if (tData[1].includes('end')) {
+          else if (tData[1].toString().toLowerCase().includes('end')) {
             rcolor = preColor;
-          }
         }
+      }
 
         myGlobals.notesData.push({ time: tData[0], task: tData[1], note: tData[2] ? tData[2].slice(0, -2) : '', rColor: rcolor });
       }
@@ -805,5 +819,6 @@ export class DashboardComponent implements OnInit {
     this.hide = true;
     this.notesData = [];
     this.video.nativeElement.load();
+    this.videoUser.nativeElement.load();
   }
 }

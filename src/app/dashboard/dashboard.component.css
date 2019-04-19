@@ -4,16 +4,25 @@
   width: 40%;
 }
 
-video {
+.video {
   display: block;
   height: 275px;
-  width: 80%;
+  width: 100%;
   -o-object-fit: fill;
   object-fit: fill;
-  margin: auto;
+  /* margin: auto; */
   max-width: 600px;
 }
 
+.videoUser {
+  display: block;
+  height: 275px;
+  width: 100%;
+  -o-object-fit: fill;
+  object-fit: fill;
+  /* margin: auto; */
+  max-width: 600px;
+}
 #wrapper-div {
   width: 60%;
   border: 1px solid black;
@@ -25,7 +34,13 @@ video {
   width: 85%;
   float:left; /* add this */
   /* border: 1px solid red; */
-  margin: 10px 5px 0px 0px;
+  margin: 10px auto;
+}
+
+#video-div-user {
+  width: 50%;
+  float:left;
+  margin: 10px auto;
 }
 
 #emojis-div {
@@ -93,11 +108,10 @@ body {
 
 .img-progress {
   /* flex: 1; */
-  width: 50%;
-  margin-top: 5px;
-  margin-left: 2px;
-  position: absolute;
-  margin-left: 53px;
+  width: 60%;
+  /*position: absolute;
+  margin-left: 53px; */
+  margin-left: 13px;
 }
 
 
@@ -300,6 +314,11 @@ body {
   background-color: #ffffff;
   color: black;
   border: solid 1px black;
+}
+.face-exp-progress
+{
+  margin-top:15px;
+  margin-left: auto;
 }
 
 /* 212124 */
