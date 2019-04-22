@@ -205,6 +205,7 @@ export class DashboardComponent implements OnInit {
     let counter = 0;
     let date_time_counter = 0;
     const axisXViewportMaximum = myGlobals.date_time_data.length;
+    let xVal = myGlobals.date_time_data[counter];
     const chart = new CanvasJS.Chart(drawChartsContainerId, {
       title: {
         text: 'EEG Data'
@@ -244,6 +245,7 @@ export class DashboardComponent implements OnInit {
         {
           type: 'spline',
           name: 'Attention',
+          xValueFormatString: 'Time: ' + formatXValue(xVal),
           color: '#4F81BC',
           showInLegend: true,
           markerSize: 0,
@@ -252,6 +254,7 @@ export class DashboardComponent implements OnInit {
         {
           type: 'spline',
           name: 'Relaxed',
+          xValueFormatString: 'Time: ' + formatXValue(xVal),
           color: '#9BBB58',
           showInLegend: true,
           markerSize: 0,
@@ -260,6 +263,7 @@ export class DashboardComponent implements OnInit {
         {
           type: 'spline',
           name: 'Stress',
+          xValueFormatString: 'Time: ' + formatXValue(xVal),
           color: '#C0504E',
           showInLegend: true,
           markerSize: 0,
@@ -268,7 +272,6 @@ export class DashboardComponent implements OnInit {
       ]
     });
 
-    let xVal = myGlobals.date_time_data[counter];
     let attention_yVal = myGlobals.attention_data[counter]; // 100
     let relaxed_yVal = myGlobals.relaxed_data[counter];
     let stress_yVal = myGlobals.stress_data[counter];
@@ -322,6 +325,20 @@ export class DashboardComponent implements OnInit {
     setInterval(function () {
       updateChart(1);
     }, updateInterval);
+
+    function formatXValue(xValue) {
+      let seconds = formatTime(xValue % 60);
+      let minutes = formatTime(xValue / 60);
+      return seconds + ':' + minutes;
+    }
+    function formatTime(time) {
+      let xValueTime = parseInt(time) + "";
+      if (xValueTime.length < 2) {
+        return "0" + xValueTime;
+      } else {
+        return xValueTime;
+      }
+    }
   }
 
 
@@ -508,6 +525,7 @@ export class DashboardComponent implements OnInit {
     let counter = 0;
     let date_time_counter = 0;
     const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
+    let xVal = myGlobals.dateTimeExpData[counter];
     const chart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
       theme: "light1",
       title: {
@@ -548,6 +566,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Happy',
+          xValueFormatString: 'Time: ' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#8df068',
@@ -558,6 +577,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Surprised',
+          xValueFormatString: 'Time :' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#fbc54a',
@@ -568,6 +588,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Neutral',
+          xValueFormatString: 'Time :' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#b7b7b3',
@@ -578,6 +599,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Fearful',
+          xValueFormatString: 'Time :' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#fbc54a',
@@ -588,6 +610,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Sad',
+          xValueFormatString: 'Time :' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#5099d4',
@@ -598,6 +621,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Disgusted',
+          xValueFormatString: 'Time :' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#7e2653',
@@ -608,6 +632,7 @@ export class DashboardComponent implements OnInit {
           type: 'spline',
           // axisYType: 'secondary',
           name: 'Angry',
+          xValueFormatString: 'Time :' + formatXValue(xVal),
           showInLegend: true,
           markerSize: 0,
           color: '#e41306',
@@ -616,7 +641,6 @@ export class DashboardComponent implements OnInit {
       ]
     });
 
-    let xVal = myGlobals.dateTimeExpData[counter];
     let angryExp_yVal = myGlobals.angryExpData[counter];
     let disgustedExp_yVal = myGlobals.disgustedExpData[counter];
     let fearfulExp_yVal = myGlobals.fearfulExpData[counter];
@@ -712,6 +736,21 @@ export class DashboardComponent implements OnInit {
     setInterval(function() {
       updateChart(1);
     }, updateInterval);
+
+    function formatXValue(xValue) {
+      let seconds = formatTime(xValue % 60);
+      let minutes = formatTime(xValue / 60);
+      return seconds + ':' + minutes;
+    }
+    function formatTime(time) {
+      let xValueTime = parseInt(time) + "";
+      if (xValueTime.length < 2) {
+        return "0" + xValueTime;
+      } else {
+        return xValueTime;
+      }
+    }
+
   }
 
   playCharts() {
@@ -779,12 +818,12 @@ export class DashboardComponent implements OnInit {
         fileReader.readAsText(this.files[ii], 'UTF-8');
       } else if (arrFilename[arrFilename.length - 1] === 'Video.mp4') {  // arrFilename[arrFilename.length - 1] === 'Video.avi'
 
-      const fileURL = URL.createObjectURL(this.files[ii]);
-      const videoNode = this.video.nativeElement;
-      videoNode.src = URL.createObjectURL(this.files[ii]);
-      // ToDo: Url will be change - Re-visit
-      const videoUser = this.videoUser.nativeElement;
-      videoUser.src = URL.createObjectURL(this.files[ii]);
+        const fileURL = URL.createObjectURL(this.files[ii]);
+        const videoNode = this.video.nativeElement;
+        videoNode.src = URL.createObjectURL(this.files[ii]);
+        // ToDo: Url will be change - Re-visit
+        const videoUser = this.videoUser.nativeElement;
+        videoUser.src = URL.createObjectURL(this.files[ii]);
       }
     }
   }
@@ -807,8 +846,8 @@ export class DashboardComponent implements OnInit {
           }
           else if (tData[1].toString().toLowerCase().includes('end')) {
             rcolor = preColor;
+          }
         }
-      }
 
         myGlobals.notesData.push({ time: tData[0], task: tData[1], note: tData[2] ? tData[2].slice(0, -2) : '', rColor: rcolor });
       }
