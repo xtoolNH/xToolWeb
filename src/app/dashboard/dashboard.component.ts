@@ -816,12 +816,11 @@ export class DashboardComponent implements OnInit {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoadNotes;
         fileReader.readAsText(this.files[ii], 'UTF-8');
-      } else if (arrFilename[arrFilename.length - 1] === 'Video.mp4') {  // arrFilename[arrFilename.length - 1] === 'Video.avi'
-
+      } else if (arrFilename[arrFilename.length - 1] === 'Video.mp4') {
         const fileURL = URL.createObjectURL(this.files[ii]);
         const videoNode = this.video.nativeElement;
         videoNode.src = URL.createObjectURL(this.files[ii]);
-        // ToDo: Url will be change - Re-visit
+      } else if (arrFilename[arrFilename.length - 1] === 'UserVideo.mp4') {
         const videoUser = this.videoUser.nativeElement;
         videoUser.src = URL.createObjectURL(this.files[ii]);
       }
