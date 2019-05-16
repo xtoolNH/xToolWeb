@@ -820,7 +820,7 @@ export class DashboardComponent implements OnInit {
         const fileURL = URL.createObjectURL(this.files[ii]);
         const videoNode = this.video.nativeElement;
         videoNode.src = URL.createObjectURL(this.files[ii]);
-      } else if (arrFilename[arrFilename.length - 1] === 'UserVideo.mp4') {
+      } else if (arrFilename[arrFilename.length - 1] === 'User.mp4') {
         const videoUser = this.videoUser.nativeElement;
         videoUser.src = URL.createObjectURL(this.files[ii]);
       }
