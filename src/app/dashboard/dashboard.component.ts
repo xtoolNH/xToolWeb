@@ -3,7 +3,6 @@ import * as CanvasJS from './canvasjs.min';
 import * as myGlobals from '../model/global';
 import { interval } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { collectExternalReferences } from '@angular/compiler';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,13 +17,54 @@ import { collectExternalReferences } from '@angular/compiler';
   ]
 })
 export class DashboardComponent implements OnInit {
-  chart: any;
+  eegChart: any;
+  faceChart: any;
+  eegFullChart: any;
+  faceFullChart: any;
   attentiondps = []; // dataPoints
   relaxeddps = [];
   stressdps = [];
-  flag = true;
+  attention_yVal = 0;
+  relaxed_yVal = 0;
+  stress_yVal = 0;
+
+  fullattentiondps = []; // dataPoints
+  fullrelaxeddps = [];
+  fullstressdps = [];
+  fullattention_yVal = 0;
+  fullrelaxed_yVal = 0;
+  fullstress_yVal = 0;
+  fullcounter = 0;
+  fulldate_time_counter = 0;
+  fullxVal = 0;
+  fullEEgchart: any;
+  facevideoInterval: any;
+  fullvideoIntervalEEG: any;
+  fullFacevideoInterval: any;
+
+  angryExpdps = []; // dataPoints
+  disgustedExpdps = [];
+  fearfulExpdps = [];
+  happyExpdps = [];
+  sadExpdps = [];
+  surprisedExpdps = [];
+  neutralExpdps = [];
+
+  fullfaceangryExpdps = []; // dataPoints
+  fullfacedisgustedExpdps = [];
+  fullfacefearfulExpdps = [];
+  fullfacehappyExpdps = [];
+  fullfacesadExpdps = [];
+  fullfacesurprisedExpdps = [];
+  fullfaceneutralExpdps = [];
+  fullfacedate_time_counter = 0;
+  fullfaceCounter = 0;
+  fullfacechart: any;
+  fullfaceChartxVal;
+  flag = false;
   interval;
   counter = 0;
+  faceCounter = 0;
   Angry: String = '0.0';
   Disgusted: String = '0.0';
   Fearful: String = '0.0';
@@ -36,6 +76,16 @@ export class DashboardComponent implements OnInit {
   notesData: { time: string, task: string, note: string, rColor: string }[];
   hide: boolean;
   files = [];
+  videoLength = 0;
+  videoIntervalEEG;
+  videoIntervalEEGFull;
+  videoIntervalFace;
+  date_time_counter = 0;
+  xVal = 0;
+  faceChartxVal = 0;
+  faceDateTimeCounter = 0;
+  isInitialChart = false;
+
   @ViewChild('video') video: ElementRef;
   @ViewChild('videoUser') videoUser: ElementRef;
 
@@ -45,149 +95,6 @@ export class DashboardComponent implements OnInit {
     this.hide = true;
   }
 
-  drawAttentionChart() {
-    const dps = []; // dataPoints
-    let attention_counter = 0;
-    let date_time_counter = 0;
-    const chart = new CanvasJS.Chart('attention-chart-Container', {
-      title: {
-        text: 'Attention Data'
-      },
-      axisX: {
-        title: 'Time',
-        viewportMinimum: 0,
-        viewportMaximum: 150,
-        interval: 10
-      },
-      axisY: {
-        title: 'Attention',
-        includeZero: false,
-      },
-      data: [{
-        type: 'spline',
-        markerType: 'none',
-        dataPoints: dps
-      }]
-    });
-    let xVal = myGlobals.date_time_data[date_time_counter];
-    let yVal = myGlobals.attention_data[attention_counter];  // 100
-    const updateInterval = 100;
-    function updateChart(count) {
-      for (let j = 0; j < 1; j++) {
-        if (dps.length === 143) {   // 143
-          return;
-        }
-        yVal = parseInt(myGlobals.attention_data[attention_counter]);
-        attention_counter++;
-        dps.push({
-          x: xVal,
-          y: yVal
-        });
-        date_time_counter++;
-        xVal = myGlobals.date_time_data[date_time_counter];
-      }
-      chart.render();
-    }
-    chart.render();
-    setInterval(function () { updateChart(1); }, updateInterval);
-  }
-
-  drawRelaxedChart() {
-    const dps = []; // dataPoints
-    let relaxed_counter = 0;
-    let date_time_counter = 0;
-    const chart = new CanvasJS.Chart('relaxed-chart-Container', {
-      title: {
-        text: 'Relaxed Data'
-      },
-      axisX: {
-        title: 'Time',
-        viewportMinimum: 0,
-        viewportMaximum: 150,
-        interval: 10
-      },
-      axisY: {
-        title: 'Relaxed Data',
-        includeZero: false
-      },
-      data: [{
-        type: 'spline',
-        markerType: 'none',
-        // fillOpacity: .3,
-        dataPoints: dps
-      }]
-    });
-    let xVal = myGlobals.date_time_data[date_time_counter];
-    let yVal = myGlobals.relaxed_data[relaxed_counter];  // 100
-    const updateInterval = 100;
-    function updateChart(count) {
-      for (let j = 0; j < 1; j++) {
-        if (dps.length === 143) {   // 143
-          return;
-        }
-        yVal = parseInt(myGlobals.relaxed_data[relaxed_counter]);
-        relaxed_counter++;
-        dps.push({
-          x: xVal,
-          y: yVal
-        });
-        date_time_counter++;
-        xVal = myGlobals.date_time_data[date_time_counter];
-      }
-      chart.render();
-    }
-    chart.render();
-    setInterval(function () { updateChart(1); }, updateInterval);
-  }
-
-  drawStressChart() {
-    const dps = []; // dataPoints
-    let stress_counter = 0;
-    let date_time_counter = 0;
-    const chart = new CanvasJS.Chart('stress-chart-Container', {
-      title: {
-        text: 'Stress Data'
-      },
-      axisX: {
-        title: 'Time',
-        viewportMinimum: 0,
-        viewportMaximum: 150,
-        interval: 10
-      },
-      axisY: {
-        title: 'Stress Data',
-        includeZero: false
-      },
-      data: [{
-        type: 'spline',
-        markerType: 'none',
-        dataPoints: dps
-      }]
-    });
-    let xVal = myGlobals.date_time_data[date_time_counter];
-    let yVal = myGlobals.stress_data[stress_counter];  // 100
-    const updateInterval = 100;
-    function updateChart(count) {
-      for (let j = 0; j < 1; j++) {
-        if (dps.length === 143) {   // 143
-          return;
-        }
-        yVal = parseInt(myGlobals.stress_data[stress_counter]);
-        stress_counter++;
-        dps.push({
-          x: xVal,
-          y: yVal
-        });
-        date_time_counter++;
-        xVal = myGlobals.date_time_data[date_time_counter];
-      }
-
-      chart.render();
-    }
-    chart.render();
-    setInterval(function () { updateChart(1); }, updateInterval);
-  }
-
   drawCharts() {
     let drawChartsContainerId = 'chart-Container';
     this.setEEGChartData(drawChartsContainerId);
@@ -195,18 +102,18 @@ export class DashboardComponent implements OnInit {
 
   drawFullScreenEEGChart() {
     let drawChartsContainerId = 'eeg-chart-full-Container';
-    this.setEEGChartData(drawChartsContainerId);
+    this.fullsetEEGChartData(drawChartsContainerId);
   }
 
-  setEEGChartData(drawChartsContainerId: string) {
-    const attentiondps = []; // dataPoints
-    const relaxeddps = [];
-    const stressdps = [];
-    let counter = 0;
-    let date_time_counter = 0;
+  setEEGChartData(drawChartsContainerId: any) {
+    this.attentiondps = []; // dataPoints
+    this.relaxeddps = [];
+    this.stressdps = [];
+    this.counter = 0;
+    this.date_time_counter = 0;
     const axisXViewportMaximum = myGlobals.date_time_data.length;
-    let xVal = myGlobals.date_time_data[counter];
-    const chart = new CanvasJS.Chart(drawChartsContainerId, {
+    this.xVal = myGlobals.date_time_data[this.counter];
+    this.eegChart = new CanvasJS.Chart(drawChartsContainerId, {
       title: {
         text: 'EEG Data'
       },
@@ -245,38 +152,32 @@ export class DashboardComponent implements OnInit {
         {
           type: 'spline',
           name: 'Attention',
-          xValueFormatString: 'Time: ' + formatXValue(xVal),
+          xValueFormatString: 'Time: ' + formatXValue(this.xVal),
           color: '#4F81BC',
           showInLegend: true,
           markerSize: 0,
-          dataPoints: attentiondps
+          dataPoints: this.attentiondps
         },
         {
           type: 'spline',
           name: 'Relaxed',
-          xValueFormatString: 'Time: ' + formatXValue(xVal),
+          xValueFormatString: 'Time: ' + formatXValue(this.xVal),
           color: '#9BBB58',
           showInLegend: true,
           markerSize: 0,
-          dataPoints: relaxeddps
+          dataPoints: this.relaxeddps
         },
         {
           type: 'spline',
           name: 'Stress',
-          xValueFormatString: 'Time: ' + formatXValue(xVal),
+          xValueFormatString: 'Time: ' + formatXValue(this.xVal),
           color: '#C0504E',
           showInLegend: true,
           markerSize: 0,
-          dataPoints: stressdps
+          dataPoints: this.stressdps
         }
       ]
     });
-
-    let attention_yVal = myGlobals.attention_data[counter]; // 100
-    let relaxed_yVal = myGlobals.relaxed_data[counter];
-    let stress_yVal = myGlobals.stress_data[counter];
-    const updateInterval = 1000;
-    const self = this;
 
     function toogleDataSeries(e) {
       if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
@@ -284,47 +185,292 @@ export class DashboardComponent implements OnInit {
       } else {
         e.dataSeries.visible = true;
       }
-      chart.render();
+
+      this.eegChart.render();
+    }
+    this.eegChart.render();
+
+    function formatXValue(xValue) {
+      let seconds = formatTime(xValue % 60);
+      let minutes = formatTime(xValue / 60);
+      return seconds + ':' + minutes;
     }
 
-    function updateChart(count) {
-      for (let j = 0; j < 1; j++) {
-        if (attentiondps.length === myGlobals.attention_data.length - 1) {
-          return;
-        }
-        attention_yVal = parseInt(myGlobals.attention_data[counter]);
-        relaxed_yVal = parseInt(myGlobals.relaxed_data[counter]);
-        stress_yVal = parseInt(myGlobals.stress_data[counter]);
-        counter++;
-        chart.options.axisX.stripLines[0] = {
-          value: xVal,
-          thickness: 1,
-          showOnTop: true
-        };
+    function formatTime(time) {
+      let xValueTime = parseInt(time) + "";
+      if (xValueTime.length < 2) {
+        return "0" + xValueTime;
+      } else {
+        return xValueTime;
+      }
+    }
+  }
 
-        attentiondps.push({
-          x: xVal,
-          y: attention_yVal
-        });
-        relaxeddps.push({
-          x: xVal,
-          y: relaxed_yVal
-        });
-        stressdps.push({
-          x: xVal,
-          y: stress_yVal
-        });
-        date_time_counter++;
-        xVal = myGlobals.date_time_data[date_time_counter];
+  fullsetEEGChartData(drawChartsContainerId: any) {
+    this.fullattentiondps = []; // dataPoints
+    this.fullrelaxeddps = [];
+    this.fullstressdps = [];
+    this.fullcounter = 0;
+    this.fulldate_time_counter = 0;
+    const axisXViewportMaximum = myGlobals.date_time_data.length;
+    this.fullxVal = myGlobals.date_time_data[this.fullcounter];
+    this.fullEEgchart = new CanvasJS.Chart(drawChartsContainerId, {
+      title: {
+        text: 'EEG Data'
+      },
+      axisX: {
+        title: 'Time',
+        viewportMinimum: 0,
+        viewportMaximum: axisXViewportMaximum,
+        interval: 10,
+        // tickThickness: 2,
+        stripLines: [
+          {
+            color: '#FF0000',
+            showOnTop: true
+          }
+        ]
+      },
+      axisY: {
+        title: 'Data',
+        includeZero: false,
+        viewportMinimum: 0,
+        viewportMaximum: 150,
+        interval: 50,
+        gridThickness: 0
+      },
+      toolTip: {
+        shared: true
+      },
+      legend: {
+        cursor: 'pointer',
+        verticalAlign: 'top',
+        horizontalAlign: 'center',
+        dockInsidePlotArea: true,
+        itemclick: toogleDataSeries
+      },
+      data: [
+        {
+          type: 'spline',
+          name: 'Attention',
+          xValueFormatString: 'Time: ' + formatXValue(this.fullxVal),
+          color: '#4F81BC',
+          showInLegend: true,
+          markerSize: 0,
+          dataPoints: this.fullattentiondps
+        },
+        {
+          type: 'spline',
+          name: 'Relaxed',
+          xValueFormatString: 'Time: ' + formatXValue(this.fullxVal),
+          color: '#9BBB58',
+          showInLegend: true,
+          markerSize: 0,
+          dataPoints: this.fullrelaxeddps
+        },
+        {
+          type: 'spline',
+          name: 'Stress',
+          xValueFormatString: 'Time: ' + formatXValue(this.fullxVal),
+          color: '#C0504E',
+          showInLegend: true,
+          markerSize: 0,
+          dataPoints: this.fullstressdps
+        }
+      ]
+    });
+
+    function toogleDataSeries(e) {
+      if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      } else {
+        e.dataSeries.visible = true;
       }
 
-      chart.render();
+      this.fullEEgchart.render();
+    }
+    this.fullEEgchart.render();
+
+    function formatXValue(xValue) {
+      let seconds = formatTime(xValue % 60);
+      let minutes = formatTime(xValue / 60);
+      return seconds + ':' + minutes;
     }
 
-    chart.render();
-    setInterval(function () {
-      updateChart(1);
-    }, updateInterval);
+    function formatTime(time) {
+      let xValueTime = parseInt(time) + "";
+      if (xValueTime.length < 2) {
+        return "0" + xValueTime;
+      } else {
+        return xValueTime;
+      }
+    }
+  }
+
+  // Facial expression chart
+  faceExpressionsDrawChart() {
+    let faceExpDrawChartContainerId = 'face-expressions-chart-Container';
+    this.setFaceExpressionChartData(faceExpDrawChartContainerId);
+  }
+
+  drawChartFullScreenfaceExpressions() {
+    let faceExpDrawChartContainerId = 'face-expressions-chart-full-Container';
+    this.fullsetFaceExpressionChartData(faceExpDrawChartContainerId);
+  }
+
+  setFaceExpressionChartData(faceExpDrawChartContainerId: string) {
+    this.angryExpdps = []; // dataPoints
+    this.disgustedExpdps = [];
+    this.fearfulExpdps = [];
+    this.happyExpdps = [];
+    this.sadExpdps = [];
+    this.surprisedExpdps = [];
+    this.neutralExpdps = [];
+    this.faceCounter = 0;
+    this.faceDateTimeCounter = 0;
+    const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
+    this.faceChartxVal = myGlobals.dateTimeExpData[this.faceCounter];
+    this.faceChart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
+      theme: "light1",
+      title: {
+        text: 'Facial Expression Data'
+      },
+      axisX: {
+        title: 'Time',
+        viewportMinimum: 0,
+        viewportMaximum: axisXViewportMaximum,
+        interval: 10,
+        stripLines: [
+          {
+            color: '#FF0000',
+            showOnTop: true
+          }
+        ]
+      },
+      axisY: {
+        title: 'Data',
+        gridThickness: 0,
+        includeZero: false,
+        viewportMinimum: 0,
+        viewportMaximum: 150,
+        interval: 50
+      },
+      toolTip: {
+        shared: true
+      },
+      legend: {
+        cursor: 'pointer',
+        verticalAlign: 'top',
+        horizontalAlign: 'center',
+        dockInsidePlotArea: true,
+        itemclick: toogleDataSeries
+      },
+      data: [
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Happy',
+          xValueFormatString: 'Time: ' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#8df068',
+          // markerType: 'none',
+          dataPoints: this.happyExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Surprised',
+          xValueFormatString: 'Time :' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#fbc54a',
+          // markerType: 'none',
+          dataPoints: this.surprisedExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Neutral',
+          xValueFormatString: 'Time :' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#b7b7b3',
+          // markerType: 'none',
+          dataPoints: this.neutralExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Fearful',
+          xValueFormatString: 'Time :' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#fbc54a',
+          // markerType: 'none',
+          dataPoints: this.fearfulExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Sad',
+          xValueFormatString: 'Time :' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#5099d4',
+          // markerType: 'none',
+          dataPoints: this.sadExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Disgusted',
+          xValueFormatString: 'Time :' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#7e2653',
+          // markerType: 'none',
+          dataPoints: this.disgustedExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Angry',
+          xValueFormatString: 'Time :' + formatXValue(this.faceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#e41306',
+          dataPoints: this.angryExpdps
+        }
+      ]
+    });
+
+    let angryExp_yVal = myGlobals.angryExpData[this.counter];
+    let disgustedExp_yVal = myGlobals.disgustedExpData[this.counter];
+    let fearfulExp_yVal = myGlobals.fearfulExpData[this.counter];
+    let happyExp_yVal = myGlobals.happyExpData[this.counter];
+    let sadExp_yVal = myGlobals.sadExpData[this.counter];
+    let surprisedExp_yVal = myGlobals.surprisedExpData[this.counter];
+    let neutralExp_yVal = myGlobals.neutralExpData[this.counter];
+
+    this.Angry = angryExp_yVal;
+    this.Disgusted = disgustedExp_yVal;
+    this.Fearful = fearfulExp_yVal;
+    this.Happy = happyExp_yVal;
+    this.Sad = sadExp_yVal;
+    this.Surprised = surprisedExp_yVal;
+    this.Neutral = neutralExp_yVal;
+
+    function toogleDataSeries(e) {
+      if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      } else {
+        e.dataSeries.visible = true;
+      }
+      this.faceChart.render();
+    }
+
+    this.faceChart.render();
 
     function formatXValue(xValue) {
       let seconds = formatTime(xValue % 60);
@@ -339,8 +485,178 @@ export class DashboardComponent implements OnInit {
         return xValueTime;
       }
     }
+
   }
 
+  fullsetFaceExpressionChartData(faceExpDrawChartContainerId: string) {
+    this.fullfaceangryExpdps = []; // dataPoints
+    this.fullfacedisgustedExpdps = [];
+    this.fullfacefearfulExpdps = [];
+    this.fullfacehappyExpdps = [];
+    this.fullfacesadExpdps = [];
+    this.fullfacesurprisedExpdps = [];
+    this.fullfaceneutralExpdps = [];
+    this.fullfaceCounter = 0;
+    this.fullfacedate_time_counter = 0;
+    const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
+    this.fullfaceChartxVal = myGlobals.dateTimeExpData[this.fullfaceCounter];
+    this.fullfacechart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
+      theme: "light1",
+      title: {
+        text: 'Facial Expression Data'
+      },
+      axisX: {
+        title: 'Time',
+        viewportMinimum: 0,
+        viewportMaximum: axisXViewportMaximum,
+        interval: 10,
+        stripLines: [
+          {
+            color: '#FF0000',
+            showOnTop: true
+          }
+        ]
+      },
+      axisY: {
+        title: 'Data',
+        gridThickness: 0,
+        includeZero: false,
+        viewportMinimum: 0,
+        viewportMaximum: 150,
+        interval: 50
+      },
+      toolTip: {
+        shared: true
+      },
+      legend: {
+        cursor: 'pointer',
+        verticalAlign: 'top',
+        horizontalAlign: 'center',
+        dockInsidePlotArea: true,
+        itemclick: toogleDataSeries
+      },
+      data: [
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Happy',
+          xValueFormatString: 'Time: ' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#8df068',
+          // markerType: 'none',
+          dataPoints: this.fullfacehappyExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Surprised',
+          xValueFormatString: 'Time :' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#fbc54a',
+          // markerType: 'none',
+          dataPoints: this.fullfacesurprisedExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Neutral',
+          xValueFormatString: 'Time :' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#b7b7b3',
+          // markerType: 'none',
+          dataPoints: this.fullfaceneutralExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Fearful',
+          xValueFormatString: 'Time :' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#fbc54a',
+          // markerType: 'none',
+          dataPoints: this.fullfacefearfulExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Sad',
+          xValueFormatString: 'Time :' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#5099d4',
+          // markerType: 'none',
+          dataPoints: this.fullfacesadExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Disgusted',
+          xValueFormatString: 'Time :' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#7e2653',
+          // markerType: 'none',
+          dataPoints: this.fullfacedisgustedExpdps
+        },
+        {
+          type: 'spline',
+          // axisYType: 'secondary',
+          name: 'Angry',
+          xValueFormatString: 'Time :' + formatXValue(this.fullfaceChartxVal),
+          showInLegend: true,
+          markerSize: 0,
+          color: '#e41306',
+          dataPoints: this.fullfaceangryExpdps
+        }
+      ]
+    });
+
+    let angryExp_yVal = myGlobals.angryExpData[this.fullfaceCounter];
+    let disgustedExp_yVal = myGlobals.disgustedExpData[this.fullfaceCounter];
+    let fearfulExp_yVal = myGlobals.fearfulExpData[this.fullfaceCounter];
+    let happyExp_yVal = myGlobals.happyExpData[this.fullfaceCounter];
+    let sadExp_yVal = myGlobals.sadExpData[this.fullfaceCounter];
+    let surprisedExp_yVal = myGlobals.surprisedExpData[this.fullfaceCounter];
+    let neutralExp_yVal = myGlobals.neutralExpData[this.fullfaceCounter];
+
+    this.Angry = angryExp_yVal;
+    this.Disgusted = disgustedExp_yVal;
+    this.Fearful = fearfulExp_yVal;
+    this.Happy = happyExp_yVal;
+    this.Sad = sadExp_yVal;
+    this.Surprised = surprisedExp_yVal;
+    this.Neutral = neutralExp_yVal;
+
+    function toogleDataSeries(e) {
+      if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      } else {
+        e.dataSeries.visible = true;
+      }
+      this.fullfacechart.render();
+    }
+
+    this.fullfacechart.render();
+
+    function formatXValue(xValue) {
+      let seconds = formatTime(xValue % 60);
+      let minutes = formatTime(xValue / 60);
+      return seconds + ':' + minutes;
+    }
+    function formatTime(time) {
+      let xValueTime = parseInt(time) + "";
+      if (xValueTime.length < 2) {
+        return "0" + xValueTime;
+      } else {
+        return xValueTime;
+      }
+    }
+
+  }
 
   updateEEGChart() {
     const self = this;
@@ -355,7 +671,7 @@ export class DashboardComponent implements OnInit {
       self.counter++;
 
 
-      self.chart.options.axisX.stripLines[0] = {
+      self.eegChart.options.axisX.stripLines[0] = {
         value: xVal,
         thickness: 1,
         showOnTop: true
@@ -376,7 +692,7 @@ export class DashboardComponent implements OnInit {
       xVal = myGlobals.date_time_data[self.counter];
     }
 
-    self.chart.render();
+    self.eegChart.render();
   }
 
   playPauseCharts() {
@@ -392,8 +708,8 @@ export class DashboardComponent implements OnInit {
     this.flag = !(this.flag);
   }
 
-  playVideo(event) {
-    event.target.paused ? event.target.play() : event.target.pause();
+  playVideo(event: any) {
+    event.target.paused ? this.onVideoPlay() : this.onVideoPause();
   }
 
   onFileLoad(fileLoadedEvent) {
@@ -501,284 +817,52 @@ export class DashboardComponent implements OnInit {
     const videoNode = document.querySelector('video');
   }
 
-  faceExpressionsDrawChart() {
-    let faceExpDrawChartContainerId = 'face-expressions-chart-Container';
-    // Moved code to common method to set the face expression data
-    this.setFaceExpressionChartData(faceExpDrawChartContainerId);
-  }
-
-  drawChartFullScreenfaceExpressions() {
-    let faceExpDrawChartContainerId = 'face-expressions-chart-full-Container';
-    // Moved code to common method to set the face expression data
-    this.setFaceExpressionChartData(faceExpDrawChartContainerId);
-  }
-
-  // Common method to set the face expression chart data
-  setFaceExpressionChartData(faceExpDrawChartContainerId: string) {
-    let angryExpdps = []; // dataPoints
-    let disgustedExpdps = [];
-    let fearfulExpdps = [];
-    let happyExpdps = [];
-    let sadExpdps = [];
-    let surprisedExpdps = [];
-    let neutralExpdps = [];
-    let counter = 0;
-    let date_time_counter = 0;
-    const axisXViewportMaximum = myGlobals.dateTimeExpData.length;
-    let xVal = myGlobals.dateTimeExpData[counter];
-    const chart = new CanvasJS.Chart(faceExpDrawChartContainerId, {
-      theme: "light1",
-      title: {
-        text: 'Facial Expression Data'
-      },
-      axisX: {
-        title: 'Time',
-        viewportMinimum: 0,
-        viewportMaximum: axisXViewportMaximum,
-        interval: 10,
-        stripLines: [
-          {
-            color: '#FF0000',
-            showOnTop: true
-          }
-        ]
-      },
-      axisY: {
-        title: 'Data',
-        gridThickness: 0,
-        includeZero: false,
-        viewportMinimum: 0,
-        viewportMaximum: 150,
-        interval: 50
-      },
-      toolTip: {
-        shared: true
-      },
-      legend: {
-        cursor: 'pointer',
-        verticalAlign: 'top',
-        horizontalAlign: 'center',
-        dockInsidePlotArea: true,
-        itemclick: toogleDataSeries
-      },
-      data: [
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Happy',
-          xValueFormatString: 'Time: ' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#8df068',
-          // markerType: 'none',
-          dataPoints: happyExpdps
-        },
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Surprised',
-          xValueFormatString: 'Time :' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#fbc54a',
-          // markerType: 'none',
-          dataPoints: surprisedExpdps
-        },
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Neutral',
-          xValueFormatString: 'Time :' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#b7b7b3',
-          // markerType: 'none',
-          dataPoints: neutralExpdps
-        },
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Fearful',
-          xValueFormatString: 'Time :' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#fbc54a',
-          // markerType: 'none',
-          dataPoints: fearfulExpdps
-        },
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Sad',
-          xValueFormatString: 'Time :' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#5099d4',
-          // markerType: 'none',
-          dataPoints: sadExpdps
-        },
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Disgusted',
-          xValueFormatString: 'Time :' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#7e2653',
-          // markerType: 'none',
-          dataPoints: disgustedExpdps
-        },
-        {
-          type: 'spline',
-          // axisYType: 'secondary',
-          name: 'Angry',
-          xValueFormatString: 'Time :' + formatXValue(xVal),
-          showInLegend: true,
-          markerSize: 0,
-          color: '#e41306',
-          dataPoints: angryExpdps
-        }
-      ]
-    });
-
-    let angryExp_yVal = myGlobals.angryExpData[counter];
-    let disgustedExp_yVal = myGlobals.disgustedExpData[counter];
-    let fearfulExp_yVal = myGlobals.fearfulExpData[counter];
-    let happyExp_yVal = myGlobals.happyExpData[counter];
-    let sadExp_yVal = myGlobals.sadExpData[counter];
-    let surprisedExp_yVal = myGlobals.surprisedExpData[counter];
-    let neutralExp_yVal = myGlobals.neutralExpData[counter];
-
-    this.Angry = angryExp_yVal;
-    this.Disgusted = disgustedExp_yVal;
-    this.Fearful = fearfulExp_yVal;
-    this.Happy = happyExp_yVal;
-    this.Sad = sadExp_yVal;
-    this.Surprised = surprisedExp_yVal;
-    this.Neutral = neutralExp_yVal;
-    let self = this;
-    const updateInterval = 1000;
-
-    function toogleDataSeries(e) {
-      if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
-        e.dataSeries.visible = false;
-      } else {
-        e.dataSeries.visible = true;
-      }
-      chart.render();
-    }
-
-    function updateChart(count) {
-      for (let j = 0; j < 1; j++) {
-        if (angryExpdps.length === myGlobals.angryExpData.length - 1) {
-          return;
-        }
-        angryExp_yVal = parseFloat(myGlobals.angryExpData[counter]);
-        // this.updateEEGVal(angryExp_yVal);
-        // self.angry = angryExp_yVal;
-        disgustedExp_yVal = parseFloat(myGlobals.disgustedExpData[counter]);
-        fearfulExp_yVal = parseFloat(myGlobals.fearfulExpData[counter]);
-        happyExp_yVal = parseFloat(myGlobals.happyExpData[counter]);
-        sadExp_yVal = parseFloat(myGlobals.sadExpData[counter]);
-        surprisedExp_yVal = parseFloat(myGlobals.surprisedExpData[counter]);
-        neutralExp_yVal = parseFloat(myGlobals.neutralExpData[counter]);
-        counter++;
-
-        self.Angry = angryExp_yVal;
-        self.Disgusted = disgustedExp_yVal;
-        self.Fearful = fearfulExp_yVal;
-        self.Happy = happyExp_yVal;
-        self.Sad = sadExp_yVal;
-        self.Surprised = surprisedExp_yVal;
-        self.Neutral = neutralExp_yVal;
-
-        chart.options.axisX.stripLines[0] = {
-          value: xVal,
-          thickness: 1,
-          showOnTop: true
-        };
-
-        angryExpdps.push({
-          x: xVal,
-          y: angryExp_yVal
-        });
-        disgustedExpdps.push({
-          x: xVal,
-          y: disgustedExp_yVal
-        });
-        fearfulExpdps.push({
-          x: xVal,
-          y: fearfulExp_yVal
-        });
-        happyExpdps.push({
-          x: xVal,
-          y: happyExp_yVal
-        });
-        sadExpdps.push({
-          x: xVal,
-          y: sadExp_yVal
-        });
-        surprisedExpdps.push({
-          x: xVal,
-          y: surprisedExp_yVal
-        });
-        neutralExpdps.push({
-          x: xVal,
-          y: neutralExp_yVal
-        });
-        date_time_counter++;
-        xVal = myGlobals.dateTimeExpData[counter];
-      }
-      chart.render();
-    }
-
-    chart.render();
-    setInterval(function() {
-      updateChart(1);
-    }, updateInterval);
-
-    function formatXValue(xValue) {
-      let seconds = formatTime(xValue % 60);
-      let minutes = formatTime(xValue / 60);
-      return seconds + ':' + minutes;
-    }
-    function formatTime(time) {
-      let xValueTime = parseInt(time) + "";
-      if (xValueTime.length < 2) {
-        return "0" + xValueTime;
-      } else {
-        return xValueTime;
-      }
-    }
-
-  }
-
   playCharts() {
 
     if (this.files.length === 0) {
       alert('Please upload the test file..!');
       return;
     }
-
     this.hide = false;
-    const videoList = document.getElementsByTagName('video');
+    const ele = document.getElementById('playPause');
+    const self = this;
+    if (!this.flag) {
+      const videoList = document.getElementsByTagName('video');
+      if (this.isInitialChart) {
+        setTimeout(() => {
+          if (myGlobals.attention_data.length === 0) {
+            return;
+          }
+          this.notesData = myGlobals.notesData.slice(0, myGlobals.videoObj.videoLength);
+          this.drawCharts();
+          this.faceExpressionsDrawChart();
+          this.drawFullScreenEEGChart();
+          this.drawChartFullScreenfaceExpressions();
+        }, 0);
 
-    for (let i = 0; i < videoList.length; i++) {
-      videoList[i].load();
-      videoList[i].paused ? videoList[i].play() : videoList[i].pause();
+        for (let i = 0; i < videoList.length; i++) {
+          videoList[i].load();
+          videoList[i].paused ? this.initialPlayVideo(videoList[i]) :  this.initialPauseVideo(videoList[i]);
+        }
+        this.isInitialChart = false;
+      }
+      else{
+        for (let i = 0; i < videoList.length; i++) {
+          this.initialPlayVideo(videoList[i]);
+        }
+      }
+
+      this.onVideoPlay();
+    } else {
+      const videoList = document.getElementsByTagName('video');
+
+      for (let i = 0; i < videoList.length; i++) {
+        this.initialPauseVideo(videoList[i]);
+      }
+      this.onVideoPause();
     }
 
-    const videoStart = (myGlobals.graphStartTime[0] + myGlobals.graphStartTimeFacial[0]) / 2;
-    setTimeout(() => {
-      if (myGlobals.attention_data.length === 0) {
-        return;
-      }
-      this.notesData = myGlobals.notesData;
-      this.drawCharts();
-      this.faceExpressionsDrawChart();
-      this.drawFullScreenEEGChart();
-      this.drawChartFullScreenfaceExpressions();
-    }, 0);
+    this.flag = !(this.flag);
   }
 
   initiateGraphs() {
@@ -799,15 +883,15 @@ export class DashboardComponent implements OnInit {
 
   getfolder(e) {
     this.hide = true;
+    this.isInitialChart = true;
     this.files = e.target.files;
-    const path = this.files[0].webkitRelativePath;
-    let file1 = this.files[0].name;
     for (let ii = 0; ii < this.files.length; ii++) {
       const arrFilename = (this.files[ii].name).split('_');
       if (arrFilename[arrFilename.length - 1] === 'EEG.csv') {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoad;
         fileReader.readAsText(this.files[ii], 'UTF-8');
+
       } else if (arrFilename[arrFilename.length - 1] === 'Facial.csv') {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoadForFaceExpressions;
@@ -851,6 +935,247 @@ export class DashboardComponent implements OnInit {
         myGlobals.notesData.push({ time: tData[0], task: tData[1], note: tData[2] ? tData[2].slice(0, -2) : '', rColor: rcolor });
       }
     }
+  }
+
+  initialPlayVideo(initialVideo: any) {
+    initialVideo.play();
+  }
+
+  initialPauseVideo(pauseVideo: any) {
+    pauseVideo.pause();
+  }
+
+  onVideoPlay() {
+    // event.target.play = true;
+    let self = this;
+    this.videoIntervalEEG = setInterval(function () {
+      self.updateChart(1);
+    }, 1000);
+    this.facevideoInterval = setInterval(function () {
+      self.faceupdateChart(1);
+    }, 1000);
+    this.fullvideoIntervalEEG = setInterval(function () {
+      self.fullupdateChart(1);
+    }, 1000);
+    this.fullFacevideoInterval = setInterval(function () {
+      self.fullFaceupdateChart(1);
+    }, 1000);
+  }
+
+  onVideoPause() {
+    //event.target.pause = true;
+    clearInterval(this.videoIntervalEEG);
+    clearInterval(this.fullvideoIntervalEEG);
+    clearInterval(this.facevideoInterval);
+    clearInterval(this.fullFacevideoInterval);
+  }
+
+  updateChart(count: any) {
+
+    for (let j = 0; j < 1; j++) {
+      if (this.attentiondps.length === myGlobals.attention_data.length - 1) {
+        this.flag = false;
+        this.isInitialChart = true;
+        return;
+      }
+      let attention_yVal = parseInt(myGlobals.attention_data[this.counter]);
+      let relaxed_yVal = parseInt(myGlobals.relaxed_data[this.counter]);
+      let stress_yVal = parseInt(myGlobals.stress_data[this.counter]);
+      this.counter++;
+      this.eegChart.options.axisX.stripLines[0] = {
+        value: this.xVal,
+        thickness: 1,
+        showOnTop: true
+      };
+
+      this.attentiondps.push({
+        x: this.xVal,
+        y: attention_yVal
+      });
+      this.relaxeddps.push({
+        x: this.xVal,
+        y: relaxed_yVal
+      });
+      this.stressdps.push({
+        x: this.xVal,
+        y: stress_yVal
+      });
+      this.date_time_counter++;
+      this.xVal = myGlobals.date_time_data[this.date_time_counter];
+    }
+    this.eegChart.render();
+  }
+
+  faceupdateChart(count: any) {
+    let self = this;
+    for (let j = 0; j < 1; j++) {
+      if (this.angryExpdps.length === myGlobals.angryExpData.length - 1) {
+        return;
+      }
+      let angryExp_yVal = parseFloat(myGlobals.angryExpData[this.faceCounter]);
+      let disgustedExp_yVal = parseFloat(myGlobals.disgustedExpData[this.faceCounter]);
+      let fearfulExp_yVal = parseFloat(myGlobals.fearfulExpData[this.faceCounter]);
+      let happyExp_yVal = parseFloat(myGlobals.happyExpData[this.faceCounter]);
+      let sadExp_yVal = parseFloat(myGlobals.sadExpData[this.faceCounter]);
+      let surprisedExp_yVal = parseFloat(myGlobals.surprisedExpData[this.faceCounter]);
+      let neutralExp_yVal = parseFloat(myGlobals.neutralExpData[this.faceCounter]);
+      this.faceCounter++;
+
+      self.Angry = angryExp_yVal.toString();
+      self.Disgusted = disgustedExp_yVal.toString();
+      self.Fearful = fearfulExp_yVal.toString();
+      self.Happy = happyExp_yVal.toString();
+      self.Sad = sadExp_yVal.toString();
+      self.Surprised = surprisedExp_yVal.toString();
+      self.Neutral = neutralExp_yVal.toString();
+
+      this.faceChart.options.axisX.stripLines[0] = {
+        value: this.faceChartxVal,
+        thickness: 1,
+        showOnTop: true
+      };
+
+
+      this.angryExpdps.push({
+        x: this.faceChartxVal,
+        y: angryExp_yVal
+      });
+      this.disgustedExpdps.push({
+        x: this.faceChartxVal,
+        y: disgustedExp_yVal
+      });
+      this.fearfulExpdps.push({
+        x: this.faceChartxVal,
+        y: fearfulExp_yVal
+      });
+      this.happyExpdps.push({
+        x: this.faceChartxVal,
+        y: happyExp_yVal
+      });
+      this.sadExpdps.push({
+        x: this.faceChartxVal,
+        y: sadExp_yVal
+      });
+      this.surprisedExpdps.push({
+        x: this.faceChartxVal,
+        y: surprisedExp_yVal
+      });
+      this.neutralExpdps.push({
+        x: this.faceChartxVal,
+        y: neutralExp_yVal
+      });
+      this.faceDateTimeCounter++;
+      this.faceChartxVal = myGlobals.dateTimeExpData[this.faceCounter];
+    }
+    this.faceChart.render();
+  }
+
+  fullupdateChart(count: any) {
+
+    for (let j = 0; j < 1; j++) {
+      if (this.attentiondps.length === myGlobals.attention_data.length - 1) {
+        return;
+      }
+      let attention_yVal = parseInt(myGlobals.attention_data[this.fullcounter]);
+      let relaxed_yVal = parseInt(myGlobals.relaxed_data[this.fullcounter]);
+      let stress_yVal = parseInt(myGlobals.stress_data[this.fullcounter]);
+      this.fullcounter++;
+      this.fullEEgchart.options.axisX.stripLines[0] = {
+        value: this.fullxVal,
+        thickness: 1,
+        showOnTop: true
+      };
+
+      this.fullattentiondps.push({
+        x: this.fullxVal,
+        y: attention_yVal
+      });
+      this.fullrelaxeddps.push({
+        x: this.fullxVal,
+        y: relaxed_yVal
+      });
+      this.fullstressdps.push({
+        x: this.fullxVal,
+        y: stress_yVal
+      });
+      this.fulldate_time_counter++;
+      this.fullxVal = myGlobals.date_time_data[this.fulldate_time_counter];
+    }
+
+    this.fullEEgchart.render();
+
+  }
+
+  fullFaceupdateChart(count: any) {
+
+    let self = this;
+    for (let j = 0; j < 1; j++) {
+      if (this.fullfaceangryExpdps.length === myGlobals.angryExpData.length - 1) {
+        return;
+      }
+      let angryExp_yVal = parseFloat(myGlobals.angryExpData[this.fullfaceCounter]);
+      // this.updateEEGVal(angryExp_yVal);
+      // self.angry = angryExp_yVal;
+      let disgustedExp_yVal = parseFloat(myGlobals.disgustedExpData[this.fullfaceCounter]);
+      let fearfulExp_yVal = parseFloat(myGlobals.fearfulExpData[this.fullfaceCounter]);
+      let happyExp_yVal = parseFloat(myGlobals.happyExpData[this.fullfaceCounter]);
+      let sadExp_yVal = parseFloat(myGlobals.sadExpData[this.fullfaceCounter]);
+      let surprisedExp_yVal = parseFloat(myGlobals.surprisedExpData[this.fullfaceCounter]);
+      let neutralExp_yVal = parseFloat(myGlobals.neutralExpData[this.fullfaceCounter]);
+      this.fullfaceCounter++;
+
+      self.Angry = angryExp_yVal.toString();
+      self.Disgusted = disgustedExp_yVal.toString();
+      self.Fearful = fearfulExp_yVal.toString();
+      self.Happy = happyExp_yVal.toString();
+      self.Sad = sadExp_yVal.toString();
+      self.Surprised = surprisedExp_yVal.toString();
+      self.Neutral = neutralExp_yVal.toString();
+
+      this.fullfacechart.options.axisX.stripLines[0] = {
+        value: this.fullfaceChartxVal,
+        thickness: 1,
+        showOnTop: true
+      };
+
+
+      this.fullfaceangryExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: angryExp_yVal
+      });
+      this.fullfacedisgustedExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: disgustedExp_yVal
+      });
+      this.fullfacefearfulExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: fearfulExp_yVal
+      });
+      this.fullfacehappyExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: happyExp_yVal
+      });
+      this.fullfacesadExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: sadExp_yVal
+      });
+      this.fullfacesurprisedExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: surprisedExp_yVal
+      });
+      this.fullfaceneutralExpdps.push({
+        x: this.fullfaceChartxVal,
+        y: neutralExp_yVal
+      });
+      this.fullfacedate_time_counter++;
+      this.fullfaceChartxVal = myGlobals.dateTimeExpData[this.fullfaceCounter];
+    }
+    this.fullfacechart.render();
+  }
+
+
+  getVideoLength(event: any, video: any) {
+    myGlobals.videoObj.videoLength = parseInt(video.duration);
   }
 
   reset() {

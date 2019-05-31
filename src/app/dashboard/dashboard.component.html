@@ -10,7 +10,7 @@
         directory multiple class="custom-file-input" id="customFile">
       <label class="custom-file-label" for="customFile">Choose file</label>
     </div>
-    <button class="btn btn-outline-primary my-2 my-sm-0"  type="submit" (click)="playCharts()">Start</button>
+    <button class="btn btn-outline-primary my-2 my-sm-0" id="playPause" type="submit" (click)="playCharts()">{{ flag ? 'Pause' : 'Play' }}</button>
   </div>
 </nav>
 <!-- <div class="container-fluid top-header">
@@ -38,7 +38,7 @@
     </div>
     <div class="row">
       <div class="col-md-6 " id="video-div">
-        <video class="video" #video controls (click)="playVideo($event)">
+        <video class="video" controls #video (click)="playVideo($event)" (loadedmetadata)="getVideoLength($event,video)" >
 
         </video>
       </div>
@@ -111,7 +111,7 @@
       <div class="timeline">
         <div class="events">
           <ol>
-            <ul>
+            <ul class="p-0" >
               <li *ngFor="let note of notesData" placement="bottom" container="body"
                 ngbTooltip="{{note.time}}-{{note.task}} {{note.note}}">
                 <a *ngIf="(note.task && note.note) || note.task"
