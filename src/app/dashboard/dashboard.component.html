@@ -111,7 +111,7 @@
       <div class="timeline">
         <div class="events">
           <ol>
-            <ul class="p-0" >
+            <ul>
               <li *ngFor="let note of notesData" placement="bottom" container="body"
                 ngbTooltip="{{note.time}}-{{note.task}} {{note.note}}">
                 <a *ngIf="(note.task && note.note) || note.task"

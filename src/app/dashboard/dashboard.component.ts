@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
 import * as myGlobals from '../model/global';
-import { interval } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
@@ -77,9 +76,7 @@ export class DashboardComponent implements OnInit {
   hide: boolean;
   files = [];
   videoLength = 0;
-  videoIntervalEEG;
-  videoIntervalEEGFull;
-  videoIntervalFace;
+  videoInterval;
   date_time_counter = 0;
   xVal = 0;
   faceChartxVal = 0;
@@ -188,7 +185,6 @@ export class DashboardComponent implements OnInit {
 
       this.eegChart.render();
     }
-    this.eegChart.render();
 
     function formatXValue(xValue) {
       let seconds = formatTime(xValue % 60);
@@ -289,7 +285,6 @@ export class DashboardComponent implements OnInit {
 
       this.fullEEgchart.render();
     }
-    this.fullEEgchart.render();
 
     function formatXValue(xValue) {
       let seconds = formatTime(xValue % 60);
@@ -470,7 +465,6 @@ export class DashboardComponent implements OnInit {
       this.faceChart.render();
     }
 
-    this.faceChart.render();
 
     function formatXValue(xValue) {
       let seconds = formatTime(xValue % 60);
@@ -640,7 +634,6 @@ export class DashboardComponent implements OnInit {
       this.fullfacechart.render();
     }
 
-    this.fullfacechart.render();
 
     function formatXValue(xValue) {
       let seconds = formatTime(xValue % 60);
@@ -833,32 +826,22 @@ export class DashboardComponent implements OnInit {
           if (myGlobals.attention_data.length === 0) {
             return;
           }
-          this.notesData = myGlobals.notesData.slice(0, myGlobals.videoObj.videoLength);
+          this.notesData = myGlobals.notesData.slice(0, myGlobals.videoObj.videoLength + 1);
           this.drawCharts();
           this.faceExpressionsDrawChart();
           this.drawFullScreenEEGChart();
           this.drawChartFullScreenfaceExpressions();
+          this.onVideoPlay();
         }, 0);
 
-        for (let i = 0; i < videoList.length; i++) {
-          videoList[i].load();
-          videoList[i].paused ? this.initialPlayVideo(videoList[i]) :  this.initialPauseVideo(videoList[i]);
-        }
+
         this.isInitialChart = false;
       }
-      else{
-        for (let i = 0; i < videoList.length; i++) {
-          this.initialPlayVideo(videoList[i]);
-        }
-      }
+      else {
+        this.onVideoPlay();
 
-      this.onVideoPlay();
+      }
     } else {
-      const videoList = document.getElementsByTagName('video');
-
-      for (let i = 0; i < videoList.length; i++) {
-        this.initialPauseVideo(videoList[i]);
-      }
       this.onVideoPause();
     }
 
@@ -884,7 +867,7 @@ export class DashboardComponent implements OnInit {
   getfolder(e) {
     this.hide = true;
     this.isInitialChart = true;
-    this.files = e.target.files;
+    this.files = Array.from(e.target.files);
     for (let ii = 0; ii < this.files.length; ii++) {
       const arrFilename = (this.files[ii].name).split('_');
       if (arrFilename[arrFilename.length - 1] === 'EEG.csv') {
@@ -895,10 +878,6 @@ export class DashboardComponent implements OnInit {
       } else if (arrFilename[arrFilename.length - 1] === 'Facial.csv') {
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoadForFaceExpressions;
-        fileReader.readAsText(this.files[ii], 'UTF-8');
-      } else if (arrFilename[arrFilename.length - 1] === 'Notes.csv') {
-        const fileReader = new FileReader();
-        fileReader.onload = this.onFileLoadNotes;
         fileReader.readAsText(this.files[ii], 'UTF-8');
       } else if (arrFilename[arrFilename.length - 1] === 'Video.mp4') {
         const fileURL = URL.createObjectURL(this.files[ii]);
@@ -916,7 +895,7 @@ export class DashboardComponent implements OnInit {
     const textFromFileLoaded = JSON.stringify(fileLoadedEvent.target.result);
     const local_data = (textFromFileLoaded).split('\\n');
     let preColor = null;
-    for (let i = 0; i < myGlobals.date_time_data.length; i++) {
+    for (let i = 0; i < myGlobals.videoObj.videoLength; i++) {
       if (i > 0) {
         const tData = local_data[i].split(',');
         let rcolor = null;
@@ -946,31 +925,50 @@ export class DashboardComponent implements OnInit {
   }
 
   onVideoPlay() {
-    // event.target.play = true;
+    let count = 0;
     let self = this;
-    this.videoIntervalEEG = setInterval(function () {
-      self.updateChart(1);
+     this.videoInterval = setInterval(function () {
+      count ++;
+      if (count === 1) {
+        self.onPlayVideo();
+      }
+
+      self.updateChart();
+      self.fullupdateChart();
+      self.faceupdateChart();
+      self.fullFaceupdateChart();
+      document.querySelector('video').currentTime = self.counter - 1;
+
     }, 1000);
-    this.facevideoInterval = setInterval(function () {
-      self.faceupdateChart(1);
-    }, 1000);
-    this.fullvideoIntervalEEG = setInterval(function () {
-      self.fullupdateChart(1);
-    }, 1000);
-    this.fullFacevideoInterval = setInterval(function () {
-      self.fullFaceupdateChart(1);
-    }, 1000);
+  }
+
+  onPlayVideo() {
+    const videoList = document.getElementsByTagName('video');
+    if (this.isInitialChart) {
+
+      for (let i = 0; i < videoList.length; i++) {
+        videoList[i].load();
+        videoList[i].paused ? this.initialPlayVideo(videoList[i]) : this.initialPauseVideo(videoList[i]);
+        console.log();
+      }
+    }
+    else {
+      for (let i = 0; i < videoList.length; i++) {
+        this.initialPlayVideo(videoList[i]);
+      }
+    }
   }
 
   onVideoPause() {
-    //event.target.pause = true;
-    clearInterval(this.videoIntervalEEG);
-    clearInterval(this.fullvideoIntervalEEG);
-    clearInterval(this.facevideoInterval);
-    clearInterval(this.fullFacevideoInterval);
+    clearInterval(this.videoInterval);
+      const videoList = document.getElementsByTagName('video');
+      for (let i = 0; i < videoList.length; i++) {
+        this.initialPauseVideo(videoList[i]);
+      }
   }
 
-  updateChart(count: any) {
+
+  updateChart() {
 
     for (let j = 0; j < 1; j++) {
       if (this.attentiondps.length === myGlobals.attention_data.length - 1) {
@@ -1006,7 +1004,7 @@ export class DashboardComponent implements OnInit {
     this.eegChart.render();
   }
 
-  faceupdateChart(count: any) {
+  faceupdateChart() {
     let self = this;
     for (let j = 0; j < 1; j++) {
       if (this.angryExpdps.length === myGlobals.angryExpData.length - 1) {
@@ -1070,7 +1068,7 @@ export class DashboardComponent implements OnInit {
     this.faceChart.render();
   }
 
-  fullupdateChart(count: any) {
+  fullupdateChart() {
 
     for (let j = 0; j < 1; j++) {
       if (this.attentiondps.length === myGlobals.attention_data.length - 1) {
@@ -1106,7 +1104,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  fullFaceupdateChart(count: any) {
+  fullFaceupdateChart() {
 
     let self = this;
     for (let j = 0; j < 1; j++) {
@@ -1175,7 +1173,14 @@ export class DashboardComponent implements OnInit {
 
 
   getVideoLength(event: any, video: any) {
-    myGlobals.videoObj.videoLength = parseInt(video.duration);
+
+    // Get the test video legnth for notes
+    myGlobals.videoObj.videoLength = parseInt(video.duration) + 1;
+    let videoFile = this.files.filter(f => f.name.includes('_Notes'));
+    const fileReader = new FileReader();
+    fileReader.onload = this.onFileLoadNotes;
+    fileReader.readAsText(videoFile[0], 'UTF-8');
+
   }
 
   reset() {
