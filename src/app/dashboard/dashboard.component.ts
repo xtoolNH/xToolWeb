@@ -927,17 +927,13 @@ export class DashboardComponent implements OnInit {
   onVideoPlay() {
     let count = 0;
     let self = this;
-     this.videoInterval = setInterval(function () {
-      count ++;
-      if (count === 1) {
-        self.onPlayVideo();
-      }
+    self.onPlayVideo();
+    this.videoInterval = setInterval(function () {
 
       self.updateChart();
       self.fullupdateChart();
       self.faceupdateChart();
       self.fullFaceupdateChart();
-      document.querySelector('video').currentTime = self.counter - 1;
 
     }, 1000);
   }
@@ -949,7 +945,6 @@ export class DashboardComponent implements OnInit {
       for (let i = 0; i < videoList.length; i++) {
         videoList[i].load();
         videoList[i].paused ? this.initialPlayVideo(videoList[i]) : this.initialPauseVideo(videoList[i]);
-        console.log();
       }
     }
     else {
@@ -961,10 +956,10 @@ export class DashboardComponent implements OnInit {
 
   onVideoPause() {
     clearInterval(this.videoInterval);
-      const videoList = document.getElementsByTagName('video');
-      for (let i = 0; i < videoList.length; i++) {
-        this.initialPauseVideo(videoList[i]);
-      }
+    const videoList = document.getElementsByTagName('video');
+    for (let i = 0; i < videoList.length; i++) {
+      this.initialPauseVideo(videoList[i]);
+    }
   }
 
 
