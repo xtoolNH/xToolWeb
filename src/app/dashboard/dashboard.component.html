@@ -5,30 +5,15 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent">
-    <div class="custom-file col-sm-5 mr-2">
+    <div class="custom-file col-sm-6 mr-2">
       <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
         directory multiple class="custom-file-input" id="customFile">
       <label class="custom-file-label" for="customFile">Choose file</label>
     </div>
-    <button class="btn btn-outline-primary my-2 my-sm-0" id="playPause" type="submit" (click)="playCharts()">{{ flag ? 'Pause' : 'Play' }}</button>
+    <button class="btn btn-outline-primary my-2 my-sm-0" id="playPause" type="submit"
+      (click)="playCharts()">{{ flag ? 'Pause' : 'Play' }}</button>
   </div>
 </nav>
-<!-- <div class="container-fluid top-header">
-  <div class="row">
-    <div class="col-2 col-sm-4 col-md-6">
-      <img src="../../assets/images/logo.PNG" class="logo" alt="">
-    </div>
-    <div class="col-10 col-sm-8 col-md-6">
-      <div class="custom-file">
-        <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
-          directory multiple class="custom-file-input" id="customFile">
-        <label class="custom-file-label" for="customFile">Choose file</label>
-      </div>
-      <button class="btn btn-primary" id="playPause" (click)="playCharts()"
-        style="float: right; margin-top: 10px;">Start</button>
-    </div>
-  </div>
-</div> -->
 <div class="container">
   <div id="main-div">
     <div *ngIf="!hide" [@fadeInOut] class="card">
@@ -37,16 +22,16 @@
       <!-- </div> -->
     </div>
     <div class="row">
-      <div class="col-md-6 " id="video-div">
-        <video class="video" controls #video (click)="playVideo($event)" (loadedmetadata)="getVideoLength($event,video)" >
-
+      <div [ngClass]="{'col-md-6': isUserVideo, 'col-md-8': !isUserVideo }" id="video-div">
+        <video class="video" controls #video (click)="playVideo($event)"
+          (loadedmetadata)="getVideoLength($event,video)">
         </video>
       </div>
-      <div class="col-md-3" id="video-div-user">
+      <div [hidden]="!isUserVideo" class="col-md-3" id="video-div-user">
         <video class="videoUser" #videoUser controls (click)="playVideo($event)">
         </video>
       </div>
-      <div class="col-md-3 face-exp-progress">
+      <div class="face-exp-progress" [ngClass]="{'col-md-3': isUserVideo,'col-md-4': !isUserVideo}">
         <ul class="list-group">
           <li class="d-flex align-items-center li-img">
             <img src="../../assets/images/Happy.png" alt="Happy" width="28" height="28" title="Happy" />
@@ -125,23 +110,15 @@
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="row">
       <div class="col-md-12">
-        <!-- <div class="card"> -->
-        <!-- <div class="card-body"> -->
         <div id="face-expressions-chart-Container" class="face-expression">
-          <!-- </div> -->
-          <!-- </div> -->
         </div>
       </div>
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="card">
-      <!-- <div class="card-body"> -->
       <div id="eeg-chart-full-Container"></div>
-      <!-- </div> -->
     </div>
     <div *ngIf="!hide" [@fadeInOut] class="card">
-      <!-- <div class="card-body"> -->
       <div id="face-expressions-chart-full-Container">
-        <!-- </div> -->
       </div>
     </div>
   </div>

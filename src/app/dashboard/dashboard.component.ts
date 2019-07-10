@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
 import * as myGlobals from '../model/global';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 
 @Component({
   selector: 'app-dashboard',
@@ -82,11 +84,12 @@ export class DashboardComponent implements OnInit {
   faceChartxVal = 0;
   faceDateTimeCounter = 0;
   isInitialChart = false;
+  isUserVideo = false;
 
   @ViewChild('video') video: ElementRef;
   @ViewChild('videoUser') videoUser: ElementRef;
 
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
     this.hide = true;
@@ -884,6 +887,7 @@ export class DashboardComponent implements OnInit {
         const videoNode = this.video.nativeElement;
         videoNode.src = URL.createObjectURL(this.files[ii]);
       } else if (arrFilename[arrFilename.length - 1] === 'User.mp4') {
+        this.isUserVideo = true;
         const videoUser = this.videoUser.nativeElement;
         videoUser.src = URL.createObjectURL(this.files[ii]);
       }

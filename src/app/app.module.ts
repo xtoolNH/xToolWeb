@@ -4,8 +4,9 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { AngularFireModule } from '@angular/fire'; 
+import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
+import { ExportAsModule } from 'ngx-export-as';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { environment } from '../environments/environment';
     BrowserModule,
     BrowserAnimationsModule,
     NgbModule,
-    AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+    ExportAsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
