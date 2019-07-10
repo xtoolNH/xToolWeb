@@ -21,3 +21,6 @@ export const notesData: {time: string, task: string, note: string, rColor: strin
 
 export const graphStartTime = [];
 export const graphStartTimeFacial = [];
+export const videoObj = {
+  videoLength: 0
+};
