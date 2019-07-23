@@ -85,6 +85,7 @@ export class DashboardComponent implements OnInit {
   faceDateTimeCounter = 0;
   isInitialChart = false;
   isUserVideo = false;
+  testName;
 
   @ViewChild('video') video: ElementRef;
   @ViewChild('videoUser') videoUser: ElementRef;
@@ -874,6 +875,7 @@ export class DashboardComponent implements OnInit {
     for (let ii = 0; ii < this.files.length; ii++) {
       const arrFilename = (this.files[ii].name).split('_');
       if (arrFilename[arrFilename.length - 1] === 'EEG.csv') {
+        this.testName = arrFilename[0];
         const fileReader = new FileReader();
         fileReader.onload = this.onFileLoad;
         fileReader.readAsText(this.files[ii], 'UTF-8');

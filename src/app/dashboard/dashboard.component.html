@@ -6,7 +6,10 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent">
-    <div class="custom-file col-sm-6 mr-2">
+      <div *ngIf="testName" class="col-sm-3 ">
+          <label class="col-form-label test-name "> Test Name : </label><h5><span class="badge badge-secondary badge-info ml-2 mt-2">{{testName}}</span></h5>
+      </div>
+    <div class="custom-file col-sm-3 mr-2">
       <input type="file" id="flup" (change)=getfolder($event) webkitdirectory mozdirectory msdirectory odirectory
         directory multiple class="custom-file-input" id="customFile">
       <label class="custom-file-label" for="customFile">Choose file</label>

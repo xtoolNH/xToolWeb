@@ -326,5 +326,10 @@ body {
   margin-top:15px;
   margin-left: auto;
 }
+.test-name
+{
+  color: #808080;
+  float: left;
+}
 
 /* 212124 */
