@@ -27,7 +27,7 @@
     "core-js": "^2.5.4",
     "firebase": "^5.9.2",
     "jquery": "^3.3.1",
-    "ngx-export-as": "^1.2.5",
+    "ngx-export-as": "^1.14.1",
     "popper.js": "^1.14.7",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"
